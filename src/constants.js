@@ -1,0 +1,17 @@
+export default {
+  background: '#000000',
+  foreground: '#ffffff',
+  time: 0,
+  spacing: 0.1,
+  radiusShift: 0.2,
+  radiusMultiplier: 5,
+  radiusDrawMultiplier: 0.25,
+  randomSeed: 0.5,
+  width: 1000,
+  height: 750,
+  radius: 1,
+  r: 40,
+  searchRadius: 1.4,
+  searchAttempts: 10,
+  sqr: x => x * x,
+};
