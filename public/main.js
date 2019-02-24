@@ -985,17 +985,17 @@
 	  background: '#000000',
 	  foreground: '#ffffff',
 	  time: 0,
-	  spacing: 0.1,
+	  spacing: 0.15,
 	  radiusShift: 0.2,
-	  radiusMultiplier: 5,
-	  radiusDrawMultiplier: 0.25,
+	  radiusMultiplier: 8,
+	  radiusDrawMultiplier: 0.38,
 	  randomSeed: 0.5,
 	  width: 1000,
 	  height: 750,
-	  radius: 1,
-	  r: 40,
-	  searchRadius: 1.4,
-	  searchAttempts: 10,
+	  radius: 8,
+	  r: 20,
+	  searchRadius: 1.8,
+	  searchAttempts: 8,
 	  sqr: x => x * x,
 	};
 
@@ -48369,217 +48369,300 @@
 
 	};
 
-	/**
-	 * @author mrdoob / http://mrdoob.com/
-	 */
+	var IMAGES = {
+	  birds_nest: [
+	    'g4309_AC.png',
+	    'i4313.png',
+	    'j4287.png',
+	    'j4374_CT.png',
+	    'k4333.png',
+	    'm4277.png',
+	    'o4332.png',
+	    'p4281_AC.png',
+	    'p_4397_AC.png',
+	    'u4295_AC.png',
+	    'y4284_AC--DF.png',
+	  ],
+	  hong_kong: [
+	    'Mandy-Barker---boat0939_CE--AC.png',
+	    'Mandy-Barker---dark-orange366_JB.png',
+	    'Mandy-Barker---duck0973_CE.png',
+	    'Mandy-Barker---fish0900_CE.png',
+	    'Mandy-Barker---fishing0896_JB.png',
+	    'Mandy-Barker---glasss0891-(1)_CE.png',
+	    'Mandy-Barker---hand0858_CE--DF.png',
+	    'Mandy-Barker---hand0864_CE.png',
+	    'Mandy-Barker---p9378_CE__jrm.png',
+	    'Mandy-Barker---rhino1495_MC--jrm.png',
+	    'Mandy-Barker---ribbon0735_MC.png',
+	    'Mandy-Barker---shoe0747_CE.png',
+	    'Mandy-Barker---shoe0748_MC--jrm.png',
+	    'Mandy-Barker---t9382_CE.png',
+	    'Mandy-Barker---t9392_MC.png',
+	    'Mandy-Barker---tC9386_AC.png',
+	    'Mandy-Barker---tag_AC_2.png',
+	    'Mandy-Barker---tag_AC_4.png',
+	  ],
+	  snowflake: [
+	    'IMG_6170_CT.png',
+	    'IMG_6176_CT_1.png',
+	    'IMG_6176_CT_2.png',
+	    'IMG_6176_CT_3.png',
+	    'IMG_6178_MC.png',
+	    'IMG_6180.png',
+	    'IMG_6181_MC--AC.png',
+	    'IMG_6182_MC.png',
+	    'IMG_6190_MC.png',
+	    'IMG_6192_CT--AC.png',
+	    'IMG_6195_MC--MC.png',
+	    'IMG_6198_CT_1.png',
+	    'IMG_6198_CT_2.png',
+	    'IMG_6198_CT_3.png',
+	    'IMG_6201_MC.png',
+	    'IMG_6203_MC--MC.png',
+	    'IMG_6229_CT--jrm.png',
+	    'IMG_6235_MC--MC.png',
+	    'IMG_6247.png',
+	    'IMG_6249.png',
+	    'IMG_6250_CT.png',
+	    'IMG_6255_MC--AC.png',
+	    'IMG_6256_MC--AC.png',
+	    'IMG_6268_MC.png',
+	    'IMG_6269_MC.png',
+	    'IMG_6270_MC--AC.png',
+	    'comb6076_CT_1.png',
+	    'comb6076_CT_3.png',
+	    'comb6076_CT_4.png',
+	    'ducktube6175_CT_1.png',
+	    'ducktube6175_CT_2.png',
+	    'ducktube6175_CT_3.png',
+	    'fork6261_CT_1.png',
+	    'fork6261_CT_2.png',
+	    'fork6261_CT_3.png',
+	    'fork6261_CT_4.png',
+	    'fork6261_CT_5.png',
+	    'fork6261_CT_6.png',
+	    'fork6261_CT_7.png',
+	  ],
+	  where_am_i: [
+	    'Mandy-Barker---3-ends440_AM.png',
+	    'Mandy-Barker---3-ends440_AM_1.png',
+	    'Mandy-Barker---3-ends440_AM_2.png',
+	    'Mandy-Barker---3-ends440_AM_3.png',
+	    'Mandy-Barker---ammend425-(1)_AM.png',
+	    'Mandy-Barker---ammend430_gm.png',
+	    'Mandy-Barker---blu-toptype402_AM -- AM.png',
+	    'Mandy-Barker---blue-swim382_AM.png',
+	    'Mandy-Barker---bluetop328_AM.png',
+	    'Mandy-Barker---brown-chiquito309_AM.png',
+	    'Mandy-Barker---feather279_AM.png',
+	    'Mandy-Barker---flying-pink410_AM.png',
+	    'Mandy-Barker---ghost-face312_AM.png',
+	    'Mandy-Barker---greentulip317_AM.png',
+	    'Mandy-Barker---heart293_AM.png',
+	    'Mandy-Barker---laid-down-octopus389_AM.png',
+	    'Mandy-Barker---long-thin-blue!296_AC.png',
+	    'Mandy-Barker---orange-deflate375_AM.png',
+	    'Mandy-Barker---orange-folded340_JB.png',
+	    'Mandy-Barker---orange-hole-side365_AC.png',
+	    'Mandy-Barker---ostrich-clump273_AM.png',
+	    'Mandy-Barker---pink-decomp-end378_AM.png',
+	    'Mandy-Barker---purple-all412_AM.png',
+	    'Mandy-Barker---silver-top344_AM.png',
+	    'Mandy-Barker---small-burst-rose401_AM.png',
+	    'Mandy-Barker---string-on-own270_AC.png',
+	    'Mandy-Barker---translucent442_AC.png',
+	    'Mandy-Barker---white-noose413_AM.png',
+	    'Mandy-Barker---white313_AC.png',
+	    'Mandy-Barker---yell-tri-purple-string306_AM.png',
+	    'Mandy-Barker---yellow-octopus387_AC.png',
+	    'Mandy-Barker---yellow-sculpture354_AM.png',
+	    'Mandy-Barker---yellow-top322_AM.png',
+	    'Mandy-Barker---yellowtorpedo305_AM.png',
+	  ],
+	};
 
-	function PointerLockControls(camera) {
-
-	  camera.rotation.set(0, 0, 0);
-
-	  var pitchObject = new Object3D();
-	  pitchObject.add(camera);
-
-	  var yawObject = new Object3D();
-	  yawObject.position.y = 10;
-	  yawObject.add(pitchObject);
-
-	  var PI_2 = Math.PI / 2;
-
-	  let mouseDown = false;
-
-	  var onMouseMove = function(event) {
-	    // if ( scope.enabled === false ) return;
-	    if (mouseDown == false) return;
-	    console.log('mouse move');
-	    var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-	    var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-
-	    yawObject.rotation.y -= movementX * 0.002;
-	    pitchObject.rotation.x -= movementY * 0.002;
-
-	    // pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
-	  };
-
-	  var onMouseDown = function(event) {
-	    console.log('mouse down');
-	    mouseDown = true;
-	  };
-
-	  var onMouseUp = function(event) {
-	    console.log('mouse up');
-	    mouseDown = false;
-	  };
-
-	  this.dispose = function() {
-	    document.removeEventListener('mousemove', onMouseMove, false);
-	  };
-
-	  document.addEventListener('mousemove', onMouseMove, false);
-	  document.addEventListener('mousedown', onMouseDown, false);
-	  document.addEventListener('mouseup', onMouseUp, false);
-
-	  this.enabled = false;
-
-	  this.getObject = function() {
-	    return yawObject;
-	  };
-
-	  this.getDirection = (function() {
-	    // assumes the camera itself is not rotated
-
-	    var direction = new Vector3(0, 0, -1);
-	    var rotation = new Euler(0, 0, 0, 'YXZ');
-
-	    return function(v) {
-	      rotation.set(pitchObject.rotation.x, yawObject.rotation.y, 0);
-
-	      v.copy(direction).applyEuler(rotation);
-
-	      return v;
-	    };
-	  })();
-	}
-
-	var IMAGES = [
-	  "images/'_4376_CT---MC.png",
-	  'images/,_4402_MC---CT.png',
-	  'images/,_4402_MC.png',
-	  'images/IMG_6170_CT---DF.png',
-	  'images/IMG_6176_CT---CT.png',
-	  'images/IMG_6178_MC---MC.png',
-	  'images/IMG_6180---MC.png',
-	  'images/IMG_6181_MC--AC---AC.png',
-	  'images/IMG_6182_MC---MC.png',
-	  'images/IMG_6190_MC---MC.png',
-	  'images/IMG_6190_MC.png',
-	  'images/IMG_6192_CT--AC---AC.png',
-	  'images/IMG_6195_MC--MC---MC.png',
-	  'images/IMG_6198_CT---MC.png',
-	  'images/IMG_6201_MC---MC.png',
-	  'images/IMG_6203_MC--MC---MC.png',
-	  'images/IMG_6229_CT--jrm---CT.png',
-	  'images/IMG_6235_MC--MC---CT.png',
-	  'images/IMG_6247---CT.png',
-	  'images/IMG_6249---MC.png',
-	  'images/IMG_6250_CT---MC.png',
-	  'images/IMG_6255_MC--AC---MC.png',
-	  'images/IMG_6256_MC--AC---AC.png',
-	  'images/IMG_6268_MC---MC.png',
-	  'images/IMG_6269_MC---CE.png',
-	  'images/IMG_6270_MC--AC---AC.png',
-	  'images/IMG_6273--AC---AC.png',
-	  'images/Mandy-Barker---3-ends440_AM---AM.png',
-	  'images/Mandy-Barker---ammend425-(1)_AM---DF.png',
-	  'images/Mandy-Barker---blu-toptype402_AM -- AM---CT.png',
-	  'images/Mandy-Barker---blue-swim382_AM---AM.png',
-	  'images/Mandy-Barker---bluetop328_AM---DF.png',
-	  'images/Mandy-Barker---boat0939_CE--AC---AC.png',
-	  'images/Mandy-Barker---brown-chiquito309_AM---CT.png',
-	  'images/Mandy-Barker---duck0973_CE---CT.png',
-	  'images/Mandy-Barker---feather279_AM---DF.png',
-	  'images/Mandy-Barker---fish0900_CE---CE.png',
-	  'images/Mandy-Barker---fishing0896_JB---AC.png',
-	  'images/Mandy-Barker---flying-pink410_AM---DF.png',
-	  'images/Mandy-Barker---ghost-face312_AM---CE.png',
-	  'images/Mandy-Barker---glasss0891-(1)_CE---AC.png',
-	  'images/Mandy-Barker---greentulip317_AM---AM.png',
-	  'images/Mandy-Barker---hand0858_CE--DF---AM.png',
-	  'images/Mandy-Barker---hand0864_CE---AM.png',
-	  'images/Mandy-Barker---heart293_AM---AM.png',
-	  'images/Mandy-Barker---laid-down-octopus389_AM---CE.png',
-	  'images/Mandy-Barker---long-thin-blue!296_AC---CE.png',
-	  'images/Mandy-Barker---orange-deflate375_AM---DF.png',
-	  'images/Mandy-Barker---orange-folded340_JB---DF.png',
-	  'images/Mandy-Barker---orange-hole-side365_AC---CE.png',
-	  'images/Mandy-Barker---ostrich-clump273_AM---DF.png',
-	  'images/Mandy-Barker---p9378_CE__jrm---AM.png',
-	  'images/Mandy-Barker---pink-decomp-end378_AM---DF.png',
-	  'images/Mandy-Barker---purple-all412_AM---AM.png',
-	  'images/Mandy-Barker---rhino1495_MC--jrm---AM.png',
-	  'images/Mandy-Barker---ribbon0735_MC---AM.png',
-	  'images/Mandy-Barker---shoe0747_CE---AM.png',
-	  'images/Mandy-Barker---shoe0748_MC--jrm---AM.png',
-	  'images/Mandy-Barker---silver-top344_AM---DF.png',
-	  'images/Mandy-Barker---small-burst-rose401_AM---AM.png',
-	  'images/Mandy-Barker---string-on-own270_AC---AM.png',
-	  'images/Mandy-Barker---t9382_CE---AM.png',
-	  'images/Mandy-Barker---t9392_MC---AM.png',
-	  'images/Mandy-Barker---tC9386_AC---AM.png',
-	  'images/Mandy-Barker---tag_AC---AM.png',
-	  'images/Mandy-Barker---tag_layer_merged_AC---AM.png',
-	  'images/Mandy-Barker---tag_merged_AC---AM.png',
-	  'images/Mandy-Barker---translucent442_AC---AM.png',
-	  'images/Mandy-Barker---white-noose413_AM---AM.png',
-	  'images/Mandy-Barker---white313_AC---AM.png',
-	  'images/Mandy-Barker---yell-tri-purple-string306_AM---AM.png',
-	  'images/Mandy-Barker---yellow-octopus387_AC---AM.png',
-	  'images/Mandy-Barker---yellow-sculpture354_AM---AM.png',
-	  'images/Mandy-Barker---yellow-top322_AM---AM.png',
-	  'images/Mandy-Barker---yellowtorpedo305_AM---AM.png',
-	  'images/comb6076_CT---MC.png',
-	  'images/ducktube6175_CT---MC.png',
-	  'images/fork6261_CT---MC.png',
-	  'images/g4309_AC---CT.png',
-	  'images/i4313---CT.png',
-	  'images/j4287---DF.png',
-	  'images/j4374_CT---DF.png',
-	  'images/k4333---DF.png',
-	  'images/m4277---AC.png',
-	  'images/o4332---AM.png',
-	  'images/p4281_AC---AM.png',
-	  'images/p_4397_AC---AM.png',
-	  'images/u4295_AC---AM.png',
-	  'images/y4284_AC--DF---AM.png',
-	];
-
+	// import aframe from 'aframe';
+	// import * as aframeSpriteComponent from 'aframe-sprite-component';
+	const aframeScene = document.querySelector('a-scene');
+	// const skies = document.querySelectorAll('a-sky');
+	const loading$1 = document.querySelector('.loader');
+	const skyContainer = document.getElementById('sky-container');
+	let handleLoadFn = null;
 	// Define scene.
-	const spheres = poissonDisk();
-	const scene = new Scene();
-	scene.background = new Color(constants.background);
-	// Add spheres.
-	const materials = [];
-	for (const image of IMAGES) {
-	    const map = new TextureLoader().load(image);
-	    materials.push(new SpriteMaterial({ map: map, color: 0xffffff, fog: false }));
+	// const scenes = ['birds_nest'];
+	const scenes = ['birds_nest', 'hong_kong', 'snowflake', 'where_am_i'];
+	let activeScene = 0;
+	const renderedEntities = [];
+	function disposeObject3D(object) {
+	    object.traverse((obj) => {
+	        if (obj instanceof Mesh) {
+	            if (obj.material) {
+	                obj.material.dispose();
+	                if (obj.material.map) {
+	                    obj.material.map.dispose();
+	                    obj.material.map = null;
+	                }
+	                if (obj.material.lightMap) {
+	                    obj.material.lightMap.dispose();
+	                    obj.material.lightMap = null;
+	                }
+	                if (obj.material.aoMap) {
+	                    obj.material.aoMap.dispose();
+	                    obj.material.aoMap = null;
+	                }
+	                if (obj.material.emissiveMap) {
+	                    obj.material.emissiveMap.dispose();
+	                    obj.material.emissiveMap = null;
+	                }
+	                if (obj.material.bumpMap) {
+	                    obj.material.bumpMap.dispose();
+	                    obj.material.bumpMap = null;
+	                }
+	                if (obj.material.normalMap) {
+	                    obj.material.normalMap.dispose();
+	                    obj.material.normalMap = null;
+	                }
+	                if (obj.material.displacementMap) {
+	                    obj.material.displacementMap.dispose();
+	                    obj.material.displacementMap = null;
+	                }
+	                if (obj.material.roughnessMap) {
+	                    obj.material.roughnessMap.dispose();
+	                    obj.material.roughnessMap = null;
+	                }
+	                if (obj.material.metalnessMap) {
+	                    obj.material.metalnessMap.dispose();
+	                    obj.material.metalnessMap = null;
+	                }
+	                if (obj.material.alphaMap) {
+	                    obj.material.alphaMap.dispose();
+	                    obj.material.alphaMap = null;
+	                }
+	                if (obj.material.envMaps) {
+	                    obj.material.envMaps.dispose();
+	                    obj.material.envMaps = null;
+	                }
+	                if (obj.material.envMap) {
+	                    obj.material.envMap.dispose();
+	                    obj.material.envMap = null;
+	                }
+	                if (obj.material.specularMap) {
+	                    obj.material.specularMap.dispose();
+	                    obj.material.specularMap = null;
+	                }
+	                if (obj.material.gradientMap) {
+	                    obj.material.gradientMap.dispose();
+	                    obj.material.gradientMap = null;
+	                }
+	            }
+	            if (obj.geometry) {
+	                obj.geometry.dispose();
+	            }
+	            if (obj.texture) {
+	                obj.texture.dispose();
+	                obj.texture = {};
+	            }
+	            if (obj.bufferGeometry) {
+	                obj.bufferGeometry.dispose();
+	            }
+	        }
+	    });
 	}
-	let i = 0;
-	// const material = new THREE.MeshBasicMaterial({color: foreground, wireframe: true});
-	for (const sphere of spheres) {
-	    var sprite = new Sprite(materials[i % materials.length]);
-	    const radius = sphere.radius * constants.radiusDrawMultiplier;
-	    sprite.scale.set(radius * 3, radius * 3, 1);
-	    sprite.position.set(sphere.x, sphere.y, sphere.z);
-	    scene.add(sprite);
-	    i += 1;
-	    // const geometry = new THREE.SphereGeometry(sphere.radius * radiusDrawMultiplier, 6, 6);
-	    // const sphereObj = new THREE.Mesh(geometry, material);
-	    // sphereObj.position.set(sphere.x, sphere.y, sphere.z);
-	    // scene.add(sphereObj);
+	function remove(elem) {
+	    while (elem.firstChild) {
+	        remove(elem.firstChild);
+	    }
+	    disposeObject3D(elem.object3D);
+	    elem.parentElement.removeChild(elem);
 	}
-	// Define camera.
-	const fov = 75;
-	const aspect = constants.width / constants.height;
-	const near = 0.1;
-	const far = 1000;
-	const camera = new PerspectiveCamera(fov, aspect, near, far);
-	// camera.position.x = 100;
-	// camera.position.y = 10;
-	// camera.position.z = 10;
-	// camera.lookAt(new THREE.Vector3(0, 0, 0));
-	const controls = new PointerLockControls(camera);
-	scene.add(controls.getObject());
-	const renderer = new WebGLRenderer({
-	    antialias: true,
-	    canvas: document.getElementById('render'),
-	});
-	renderer.setSize(constants.width, constants.height);
-	renderer.setPixelRatio(devicePixelRatio);
-	animate();
-	function animate() {
-	    requestAnimationFrame(animate);
-	    renderer.render(scene, camera);
+	function renderScene(idx) {
+	    while (renderedEntities.length > 0) {
+	        remove(renderedEntities.pop());
+	    }
+	    loading$1.classList.remove('loaded');
+	    const spheres = poissonDisk();
+	    let loadCounter = 0;
+	    handleLoadFn = () => {
+	        loadCounter++;
+	        if (loadCounter >= spheres.length + 1) {
+	            loading$1.classList.add('loaded');
+	        }
+	    };
+	    const scene = scenes[idx];
+	    const sky = document.createElement('a-sky');
+	    sky.addEventListener('materialtextureloaded', () => {
+	        handleLoadFn();
+	    });
+	    sky.setAttribute('src', `images/composites/${scene}.png`);
+	    sky.setAttribute('rotation', '0 0 0');
+	    skyContainer.appendChild(sky);
+	    renderedEntities.push(sky);
+	    // Add spheres.
+	    let i = 0;
+	    for (const sphere of spheres) {
+	        const image = document.createElement('a-image');
+	        image.addEventListener('materialtextureloaded', () => {
+	            handleLoadFn();
+	        });
+	        image.setAttribute('src', `images/${scene}/${IMAGES[scene][i % IMAGES[scene].length]}`);
+	        const container = document.createElement('a-entity');
+	        container.appendChild(image);
+	        const radius = sphere.radius * constants.radiusDrawMultiplier;
+	        container.setAttribute('position', `${sphere.x} ${sphere.y} ${sphere.z}`);
+	        image.setAttribute('rotation', `0 0 ${Math.random() * 360}`);
+	        image.setAttribute('scale', `${radius} ${radius} ${radius}`);
+	        container.setAttribute('look-at', '[camera]');
+	        aframeScene.appendChild(container);
+	        i++;
+	        if (!activeScene) {
+	            container.style.display = 'none';
+	        }
+	        renderedEntities.push(container);
+	    }
 	}
+	// Render one scene at a time
+	renderScene(activeScene);
+	function toggleStats() {
+	    if (aframeScene.hasAttribute('stats')) {
+	        aframeScene.removeAttribute('stats');
+	    }
+	    else {
+	        aframeScene.setAttribute('stats', '');
+	    }
+	}
+	document.addEventListener('keypress', e => {
+	    if (e.keyCode == 13) {
+	        // Enter
+	        if (loading$1.classList.contains('loaded')) {
+	            activeScene = (activeScene + 1) % scenes.length;
+	            renderScene(activeScene);
+	        }
+	    }
+	    else if (e.key == 's') {
+	        toggleStats();
+	    }
+	}, false);
+	// const foreground = document.getElementById('foreground');
+	// foreground.addEventListener('model-loaded', () => {
+	//   const object = (foreground as any).getObject3D('mesh');
+	//   // el.components.material.material.alphaTest = 0.5;
+	//   // el.components.material.material.depthWrite = false;
+	//   // el.components.material.material.needsUpdate = true;
+	//   const material = object.material;
+	//   if (object) {
+	//     object.traverse(node => {
+	//       console.log(node);
+	//       if (node.isMesh) {
+	//         console.log('mesh', node);
+	//         node.material.transparent = false;
+	//         node.material.alphaTest = 0.2;
+	//         // node.material.depthWrite = false;
+	//         node.material.needsUpdate = true;
+	//       }
+	//     });
+	//   }
+	// });
 
 }());
 //# sourceMappingURL=main.js.map

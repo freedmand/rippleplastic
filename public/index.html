@@ -1,9 +1,81 @@
 <html>
   <head>
     <title>Ripple Plastic</title>
+
+    <style>
+      body, html {
+        background: black;
+      }
+
+      .loader {
+        background: radial-gradient(#00000085, #000000d4);
+        z-index: 2;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        line-height: 100vh;
+        text-align: center;
+        font-size: 10vh;
+        font-family: Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: white;
+        text-shadow: 0 0 11px black, 0 0 30px black;
+        letter-spacing: 0;
+        transition: all 1s ease;
+        animation: letterbounce 1s 2s infinite alternate;
+      }
+
+      .loader.loaded {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      @keyframes letterbounce {
+        from {
+          letter-spacing: 0;
+        }
+        to {
+          letter-spacing: 0.1em;
+        }
+      }
+        
+    </style>
+
+    <script src="aframe.min.js"></script>
+    <script src="aframe-look-at-component.min.js"></script>
   </head>
   <body>
-    <canvas id="render"></canvas>
+    <div class="loader">Loading...</div>
+    <a-scene background="black">
+      <a-entity id="sky-container">
+        <!-- <a-sky src="images/composites/black.png" rotation="0 0 0"></a-sky> -->
+        <!-- <a-sky display="none" src="images/composites/birds_nest.png" rotation="0 0 0"></a-sky> -->
+        <!-- <a-sky display="none" src="images/composites/hong_kong.png" rotation="0 0 0"></a-sky> -->
+        <!-- <a-sky display="none" src="images/composites/snowflake.png" rotation="0 0 0"></a-sky> -->
+        <!-- <a-sky display="none" src="images/composites/where_am_i.png" rotation="0 0 0"></a-sky> -->
+        <a-animation attribute="rotation"
+            dur="700000"
+            fill="forwards"
+            to="130 360 -70"
+            easing="linear"
+            repeat="indefinite"></a-animation>
+      </a-entity>
+      <div class="shim"></div>
+      <!-- <a-sphere radius="15" color="black" material="side:back;transparent:true;opacity:0" geometry="">
+        <a-animation attribute="material.opacity" dur="10000" from="0" to="0.8" fill="forwards" easing="ease"></a-animation>
+      </a-sphere> -->
+      <a-entity position="0 0 0" camera look-controls>
+          <a-entity position="0 0 -10" look-at="[camera]">
+              <!-- to="73 -18 -26" -->
+            <!-- <a-entity id="foreground" collada-model="url(models/IMG_6192_CT--AC.dae)" rotation="90 0 45">
+              <a-animation attribute="rotation" dur="70000" repeat="indefinite" from="338 -430 267" to="178 -270 107" fill="forwards" easing="ease" direction="alternate"></a-animation>
+            </a-entity> -->
+            <!-- <a-image src="images/snowflake/IMG_6192_CT--AC.png" rotation="0 0 0" scale="5 5 5"></a-image> -->
+            </a-entity>
+          </a-entity>
+        </a-entity>
+    </a-scene>
     <script src="main.js"></script>
   </body>
 </html>
