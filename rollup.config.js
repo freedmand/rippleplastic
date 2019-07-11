@@ -7,6 +7,9 @@ const production = !process.env.ROLLUP_WATCH;
 
 export default {
   input: 'src/main.ts',
+  watch: {
+    clearScreen: false,
+  },
   output: {
     sourcemap: true,
     format: 'iife',

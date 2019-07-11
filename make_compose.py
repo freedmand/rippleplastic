@@ -9,6 +9,6 @@ def make_composite(fn_template, scene, up_to):
   return ' && '.join(commands)
 
 print(make_composite(
-  r'/Users/freedmand/Downloads/composites/where_am_i/%s_%d.png',
-  'where_am_i',
+  r'/Users/freedmand/Downloads/composites/world_map/%s_%d.png',
+  'world_map',
   7))

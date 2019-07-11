@@ -1,14 +1,27 @@
 <html>
   <head>
     <title>Ripple Plastic</title>
+    <meta name="description" content="A virtual reality experience of the unintended life of plastics at sea">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
 
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
     <style>
       body, html {
         background: black;
+        font-family: Lato, sans-serif;
       }
 
       .loader {
-        background: radial-gradient(#00000085, #000000d4);
+        background: black;
+        /* background: radial-gradient(#00000085, #000000d4); */
         z-index: 2;
         position: fixed;
         left: 0;
@@ -18,7 +31,6 @@
         line-height: 100vh;
         text-align: center;
         font-size: 10vh;
-        font-family: Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif;
         color: white;
         text-shadow: 0 0 11px black, 0 0 30px black;
         letter-spacing: 0;
@@ -39,42 +51,136 @@
           letter-spacing: 0.1em;
         }
       }
-        
+      
+
+    .begin.start {
+      opacity: 0;
+      pointer-events: none;
+      color: black;
+    }
+
+    .begin.start button {
+      transform: scale(0.1);
+      opacity: 0;
+    }
+
+    .begin {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 1000000;
+      background: black;
+      background: linear-gradient(black, #24024a);
+      text-align: center;
+      color: white;
+      transition: all 5s ease;
+    }
+
+    h1 {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 10vh;
+      margin-top: 30vh;
+      margin-bottom: 2vh;
+    }
+
+    h2 {
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      font-size: 4vh;
+      margin-top: 0;
+      margin-bottom: 6vh;
+    }
+
+    button {
+      font-size: 4vh;
+      letter-spacing: 0.2em;
+      font-family: Lato, sans-serif;
+      padding: 1.3vh 4vh;
+      color: #0f0031;
+      background: none;
+      border: solid 4px white;
+      border-radius: 4px;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: white;
+      transition: all 4.5s ease;
+    }
     </style>
 
     <script src="aframe.min.js"></script>
+    <script src="aframe-extras.min.js"></script>
     <script src="aframe-look-at-component.min.js"></script>
+    <script src="aframe-render-order-component.min.js"></script>
   </head>
   <body>
-    <div class="loader">Loading...</div>
-    <a-scene background="black">
-      <a-entity id="sky-container">
-        <!-- <a-sky src="images/composites/black.png" rotation="0 0 0"></a-sky> -->
-        <!-- <a-sky display="none" src="images/composites/birds_nest.png" rotation="0 0 0"></a-sky> -->
-        <!-- <a-sky display="none" src="images/composites/hong_kong.png" rotation="0 0 0"></a-sky> -->
-        <!-- <a-sky display="none" src="images/composites/snowflake.png" rotation="0 0 0"></a-sky> -->
-        <!-- <a-sky display="none" src="images/composites/where_am_i.png" rotation="0 0 0"></a-sky> -->
-        <a-animation attribute="rotation"
-            dur="700000"
-            fill="forwards"
-            to="130 360 -70"
-            easing="linear"
-            repeat="indefinite"></a-animation>
-      </a-entity>
-      <div class="shim"></div>
-      <!-- <a-sphere radius="15" color="black" material="side:back;transparent:true;opacity:0" geometry="">
-        <a-animation attribute="material.opacity" dur="10000" from="0" to="0.8" fill="forwards" easing="ease"></a-animation>
-      </a-sphere> -->
-      <a-entity position="0 0 0" camera look-controls>
-          <a-entity position="0 0 -10" look-at="[camera]">
-              <!-- to="73 -18 -26" -->
-            <!-- <a-entity id="foreground" collada-model="url(models/IMG_6192_CT--AC.dae)" rotation="90 0 45">
-              <a-animation attribute="rotation" dur="70000" repeat="indefinite" from="338 -430 267" to="178 -270 107" fill="forwards" easing="ease" direction="alternate"></a-animation>
-            </a-entity> -->
-            <!-- <a-image src="images/snowflake/IMG_6192_CT--AC.png" rotation="0 0 0" scale="5 5 5"></a-image> -->
-            </a-entity>
-          </a-entity>
+    <div class="begin" id="beginpane">
+      <h1>Ripple</h1>
+      <h2>The unintended life of plastics at sea</h2>
+      <div><button id="begin">Begin experience</button></div>
+    </div>
+
+    <!-- <div class="loader">Loading...</div> -->
+    <a-scene background="color: black" timeout="10000" render-order="background, foreground">
+      <a-assets>
+        <a-asset-item id="underwaterasset" src="sound/underwater.mp3" preload="auto" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="intro1asset" src="audio/intro.mp3" preload="auto" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="themeasset" src="sound/theme.mp3" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="hongkongasset" src="audio/hong_kong.mp3" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="snowflurryasset" src="audio/snowflurry.mp3" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="whereamiasset" src="audio/where_am_i.mp3" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="birdsnestasset" src="audio/birds_nest.mp3" response-type="arraybuffer"></a-asset-item>
+        <!-- <a-asset-item id="worldmapasset" src="audio/worldmap.mp3" response-type="arraybuffer"></a-asset-item> -->
+        <!-- <a-asset-item id="worldmapvideo" src="video/worldmap.mp4" response-type="arraybuffer"></a-asset-item> -->
+        <a-asset-item id="outroasset" src="audio/outro.mp3" response-type="arraybuffer"></a-asset-item>
+        
+        <!-- <a-asset-item id="pandaasset" src="models/Mandy-Barker---p9378_CE__jrm.dae"></a-asset-item> -->
+
+        <video id="worldmapasset" loop="false" src="video/worldmap.mp4"></video>
+        
+        <!-- <img id="worldmap" src="images/world_map/map.png">
+        <img id="worldmapflattened" src="images/world_map/map_flattened.png">
+
+        <img id="imgmapsouthafrica" src="images/world_map/s_africa.png">
+        <img id="imgmaphawaii" src="images/world_map/hawaii.png">
+        <img id="imgmapjapan" src="images/world_map/japan.png">
+        <img id="imgmapmexico" src="images/world_map/mexico.png">
+        <img id="imgmapcuba" src="images/world_map/cuba.png">
+        <img id="imgmapbrazil" src="images/world_map/brazil.png">
+        <img id="imgmapcontinentalus" src="images/world_map/us.png">
+        <img id="imgmapengland" src="images/world_map/england.png">
+        <img id="imgmapcanada" src="images/world_map/canada.png">
+        <img id="imgmapchina" src="images/world_map/china.png">
+        <img id="imgmapaustralia" src="images/world_map/australia.png">
+        <img id="imgmapsweden" src="images/world_map/sweden.png">
+        <img id="imgmapiceland" src="images/world_map/iceland.png">
+        <img id="imgmapfrance" src="images/world_map/france.png">
+        <img id="imgmapspain" src="images/world_map/spain.png">
+        <img id="imgmapindia" src="images/world_map/india.png">
+        <img id="imggarbagepatch" src="images/world_map/garbagepatch.png"> -->
+      </a-assets>
+
+      <a-entity id="underwater" position="0 0 -2" sound="src: #underwaterasset; autoplay: true; loop: true; volume: 0.4"></a-entity>
+      <a-entity id="intro1" position="0 0 0" sound="src: #intro1asset; autoplay: false; loop: false; volume: 0.7"></a-entity>
+      <a-entity id="theme" position="0 0 2" sound="src: #themeasset; autoplay: false; loop: true; volume: 0;"></a-entity>
+      <a-entity id="hongkong" position="0 0 0" sound="src: #hongkongasset; autoplay: false; loop: false; volume: 0.7"></a-entity>
+      <a-entity id="snowflurry" position="0 0 0" sound="src: #snowflurryasset; autoplay: false; loop: false; volume: 0.7"></a-entity>
+      <a-entity id="whereami" position="0 0 0" sound="src: #whereamiasset; autoplay: false; loop: false; volume: 0.7"></a-entity>
+      <a-entity id="birdsnest" position="0 0 0" sound="src: #birdsnestasset; autoplay: false; loop: false; volume: 0.7"></a-entity>
+      
+      <!-- <a-entity id="" position="0 0 0" sound="src: #worldmapasset; autoplay: false; loop: false; volume: 0.7"></a-entity> -->
+      <a-entity id="outro" position="0 0 0" sound="src: #outroasset; autoplay: false; loop: false; volume: 0.7"></a-entity>
+
+      <a-entity render-order="foreground" position="0 0 0" camera look-controls>
+        <a-video id="worldmapvideo" visible="false" src="#worldmapasset" width="16" height="4" position="0 0 -4"></a-video>
+        <a-entity id="foreground-container" position="0 0 -10" look-at="[camera]">
         </a-entity>
+      </a-entity>
+
+      <a-entity render-order="background" id="sky-container" animation__rotation="property: rotation; dur: 700000; to: 130 360 -70; easing: linear; loop: true">
+      </a-entity>
     </a-scene>
     <script src="main.js"></script>
   </body>
