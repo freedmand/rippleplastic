@@ -6,8 +6,8 @@ import IMAGES from './images.js';
 
 const WORLD_MAP_SCENE = 'world_map';
 
-const THEME_OUT = 0.1;
-const THEME_IN = 0.06;
+const THEME_OUT = 0.05;
+const THEME_IN = 0.03;
 
 const CREDITS_SCALE = 1.65;
 
@@ -34,6 +34,8 @@ export class MainView {
 
   beginButton = document.getElementById('begin');
   beginPane = document.getElementById('beginpane');
+  progressButton = document.getElementById('progressbutton');
+  progressElem = document.getElementById('progress');
 
   underwaterNoise = document.getElementById('underwater');
   introAudio = document.getElementById('intro1');
@@ -181,7 +183,7 @@ export class MainView {
       );
       (this.hongkongAudio as any).components.sound.playSound();
       setTimeout(() => {
-        this.animateInForeground('Mandy-Barker---p9378_CE__jrm.dae');
+        this.animateInForeground('#pandaasset');
       }, 38000);
     }, 2000);
   }
@@ -276,105 +278,6 @@ export class MainView {
     this.renderScene(4);
   }
 
-  // async showTwoColumnText(
-  //   left: string,
-  //   right: string,
-  //   leftPad: number,
-  //   rightPad: number,
-  //   anim: number = 2000
-  // ) {
-  //   await this.removeText();
-
-  //   const text1 = this.makeText(left, 'right', anim, leftPad);
-  //   const text2 = this.makeText(right, 'left', anim, rightPad);
-
-  //   this.foregroundContainer.appendChild(text1);
-  //   this.foregroundContainer.appendChild(text2);
-  //   this.textEntities.push(text1);
-  //   this.textEntities.push(text2);
-
-  //   await timeout(anim);
-  // }
-
-  // makeText(value: string, align: string, anim: number, pad: number = 0): HTMLElement {
-  //   const text = document.createElement('a-text');
-
-  //   text.setAttribute('value', value);
-
-  //   text.setAttribute('font', 'aileronsemibold');
-  //   text.setAttribute('white-space', 'pre');
-  //   text.setAttribute('align', align);
-  //   text.setAttribute('anchor', 'center');
-  //   text.setAttribute('width', '40');
-  //   text.setAttribute('height', 'auto');
-  //   text.setAttribute('wrap-count', '80');
-  //   text.setAttribute('line-height', '40');
-  //   text.setAttribute('color', 'white');
-  //   text.setAttribute('shader', 'basic');
-  //   text.setAttribute('x-offset', `${pad}`);
-
-  //   text.setAttribute(
-  //     'animation__scale',
-  //     `property: scale; dur: ${anim}; from: ${CREDITS_SCALE - 0.5} ${CREDITS_SCALE -
-  //       0.5} ${CREDITS_SCALE - 0.5}; to: ${CREDITS_SCALE} ${CREDITS_SCALE} ${CREDITS_SCALE};`
-  //   );
-  //   text.setAttribute(
-  //     'animation__opacity',
-  //     `property: components.text.material.uniforms.opacity.value; dur: ${anim}; from: 0; to: 1;`
-  //   );
-
-  //   return text;
-  // }
-
-  // async showSimpleText(value: string, anim: number = 2000) {
-  //   await this.removeText();
-
-  //   const text = this.makeText(value, 'center', anim);
-
-  //   this.foregroundContainer.appendChild(text);
-  //   this.textEntities.push(text);
-
-  //   await timeout(anim);
-  // }
-
-  // removeText() {
-  //   return new Promise(resolve => {
-  //     if (this.textEntities.length == 0) {
-  //       resolve();
-  //       return;
-  //     }
-
-  //     this.textEntities.forEach(textEntity =>
-  //       textEntity.addEventListener('animationcomplete', e => {
-  //         if ((e as any).detail.name == 'animation__hide') {
-  //           remove(textEntity);
-  //           this.textEntities.splice(this.textEntities.indexOf(textEntity), 1);
-  //           if (this.textEntities.length == 0) resolve();
-  //           return;
-  //         }
-  //       })
-  //     );
-
-  //     this.textEntities.forEach(textEntity =>
-  //       textEntity.setAttribute(
-  //         'animation__hide',
-  //         'property: components.text.material.uniforms.opacity.value; dur: 2000; from: 1; to: 0;'
-  //       )
-  //     );
-  //   });
-  // }
-
-  // showSimpleText(value: string, anim: number = 2000) {
-  //   await this.removeText();
-
-  //   const text = this.makeText(value, 'center', anim);
-
-  //   this.foregroundContainer.appendChild(text);
-  //   this.textEntities.push(text);
-
-  //   await timeout(anim);
-  // }
-
   removeCredits() {
     return new Promise(resolve => {
       if (this.creditImg == null) {
@@ -436,8 +339,6 @@ export class MainView {
     // Show credits
     await timeout(5000);
 
-    console.log('sky');
-
     // Fade out sky
     Array.from(this.skyContainer.children).forEach(sky => {
       sky.setAttribute(
@@ -446,70 +347,27 @@ export class MainView {
       );
     });
 
-    console.log('show 1');
-
     await this.showCredits(1);
-
-    console.log('show 2');
-
-    // await this.showSimpleText(
-    //   'A project of the Graduate Program in Journalism 2019\nDepartment of Communication\nStanford University'
-    // );
 
     await timeout(10000);
 
     await this.showCredits(2);
 
-    // await this.showTwoColumnText(
-    //   'Photography\n\n\n\n\n\n',
-    //   "Photographs copyright Mandy Barker\n\nHong Kong Soup: 1826 - Poon Choi\nEVERY... Snowflake is Different\nWHERE... Am I Going\nSoup: Bird's Nest",
-    //   -25,
-    //   16.5
-    // );
-
     await timeout(13000);
 
     await this.showCredits(3);
-
-    // await this.showTwoColumnText(
-    //   'Experience design\n\nProduction\n\nMusic\n\n',
-    //   'Dylan Freedman\n\nDylan Freedman\n\n"Refuse"\nDylan Freedman',
-    //   -21.5,
-    //   19.9
-    // );
 
     await timeout(10000);
 
     await this.showCredits(4);
 
-    // await this.showTwoColumnText(
-    //   'Sound design\n\nScript writing\n\n\nVoiceover\n\n',
-    //   'Anthony J. Miller\n\nChristina Egerstrom, Amy Cruz,\nClaire Thompson\n\nAmy Cruz, Marta Oliver Craviotto,\nAnthony J. Miller',
-    //   -24,
-    //   17
-    // );
-
     await timeout(12000);
 
     await this.showCredits(5);
 
-    // await this.showTwoColumnText(
-    //   'Storyboard\n\nTechnical support',
-    //   'Anthony J. Miller\n\nJoseph Moreno, Jackie Botts',
-    //   -22.2,
-    //   18.8
-    // );
-
     await timeout(9000);
 
     await this.showCredits(6);
-
-    // await this.showTwoColumnText(
-    //   'Additional audio\n\n\nAdvisor\n\n',
-    //   'Tobin Asher\nStanford Virtual Human Interaction Lab\n\nProfessor Geri Migielicz\nHearst Professional in Residence',
-    //   -24.5,
-    //   16.5
-    // );
 
     await timeout(13000);
 
@@ -530,7 +388,42 @@ export class MainView {
     await webAudioTouchUnlock(context);
   }
 
+  loaded() {
+    this.progressButton.style.opacity = '0';
+    this.progressButton.style.pointerEvents = 'none';
+    this.beginButton.style.visibility = 'visible';
+  }
+
+  hookAssetLoader() {
+    const assets = Array.from(document.querySelector('a-assets').children);
+    const assetState: {[key: string]: boolean} = {};
+    let numLoaded = 0;
+
+    const assetLoaded = (asset: HTMLElement) => {
+      if (!assetState[asset.id]) {
+        numLoaded++;
+        this.progressElem.style.right = `${(1 - Math.min(numLoaded / assets.length, 1)) * 100}%`;
+      }
+      assetState[asset.id] = true;
+
+      if (numLoaded == assets.length) {
+        this.loaded();
+      }
+    };
+
+    assets.forEach((elem: HTMLElement) => {
+      ['canplaythrough', 'load', 'loaded'].forEach(evt => {
+        elem.addEventListener(evt, () => {
+          assetLoaded(elem);
+        });
+      });
+      if ((elem as HTMLImageElement).complete) assetLoaded(elem);
+    });
+  }
+
   constructor() {
+    this.hookAssetLoader();
+
     this.beginButton.addEventListener(
       'click',
       async () => {
@@ -552,19 +445,14 @@ export class MainView {
    * @param model The string of the relative model URL to load.
    * @param rotation The rotation amount.
    */
-  createForeground(
-    model = 'IMG_6192_CT--AC.dae',
-    rotation = '90 0 45',
-    callback: () => void
-  ) {
+  createForeground(model: string, rotation = '90 0 45', callback: () => void) {
     Array.from(this.foregroundContainer.children).forEach(child => remove(child));
     this.foreground = document.createElement('a-entity');
     (this.foreground as any).addEventListener('model-loaded', () => {
       callback();
     });
 
-    // this.foreground.setAttribute('collada-model', '#pandaasset');
-    this.foreground.setAttribute('collada-model-legacy', `url(models/${model})`);
+    this.foreground.setAttribute('collada-model-legacy', model);
     this.foreground.setAttribute('rotation', rotation);
     this.foreground.setAttribute('scale', '0 0 0');
 
@@ -643,7 +531,7 @@ export class MainView {
         this.handleLoadFn();
       });
 
-      sky.setAttribute('src', `images/composites/${scene}.png`);
+      sky.setAttribute('src', `#scene_${scene}`);
       sky.setAttribute('backround', 'black');
       sky.setAttribute('rotation', '0 0 0');
       sky.setAttribute('material', 'opacity: 0');
@@ -658,6 +546,10 @@ export class MainView {
 
     // Add spheres.
     if (renderSpheres) {
+      const sceneStart: number = IMAGES[scene][0];
+      const sceneEnd: number = IMAGES[scene][1];
+      const sceneObjects: number = sceneEnd - sceneStart + 1;
+
       let i = 0;
       for (const sphere of spheres) {
         const image = document.createElement('a-image');
@@ -672,22 +564,7 @@ export class MainView {
         image.addEventListener('materialtextureloaded', () => {
           this.handleLoadFn();
         });
-        if (scene != WORLD_MAP_SCENE) {
-          image.setAttribute(
-            'src',
-            `images/${scene}/${IMAGES[scene][i % IMAGES[scene].length]}`
-          );
-        } else {
-          let randomScene = this.scenes[
-            Math.floor(Math.random() * (this.scenes.length - 1))
-          ];
-          image.setAttribute(
-            'src',
-            `images/${randomScene}/${
-              IMAGES[randomScene][i % IMAGES[randomScene].length]
-            }`
-          );
-        }
+        image.setAttribute('src', `#object${(i % sceneObjects) + sceneStart}`);
 
         const container = document.createElement('a-entity');
         container.appendChild(image);
@@ -742,10 +619,7 @@ export class MainView {
     this.hideForeground();
   }
 
-  animateInForeground(
-    path = 'Mandy-Barker---p9378_CE__jrm.dae',
-    rotation = '190 0 45'
-  ) {
+  animateInForeground(path = '#pandaasset', rotation = '190 0 45') {
     if (this.foregrounded) return;
     this.foregrounded = true;
 

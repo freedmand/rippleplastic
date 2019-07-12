@@ -48514,121 +48514,15 @@ var app = (function (exports) {
     var webAudioTouchUnlock = unwrapExports(dist);
 
     var IMAGES = {
-      birds_nest: [
-        'g4309_AC.png',
-        'i4313.png',
-        'j4287.png',
-        'j4374_CT.png',
-        'k4333.png',
-        'm4277.png',
-        'o4332.png',
-        'p4281_AC.png',
-        'p_4397_AC.png',
-        'u4295_AC.png',
-        'y4284_AC--DF.png',
-      ],
-      hong_kong: [
-        'Mandy-Barker---boat0939_CE--AC.png',
-        'Mandy-Barker---dark-orange366_JB.png',
-        'Mandy-Barker---duck0973_CE.png',
-        'Mandy-Barker---fish0900_CE.png',
-        'Mandy-Barker---fishing0896_JB.png',
-        'Mandy-Barker---glasss0891-(1)_CE.png',
-        'Mandy-Barker---hand0858_CE--DF.png',
-        'Mandy-Barker---hand0864_CE.png',
-        'Mandy-Barker---p9378_CE__jrm.png',
-        'Mandy-Barker---rhino1495_MC--jrm.png',
-        'Mandy-Barker---ribbon0735_MC.png',
-        'Mandy-Barker---shoe0747_CE.png',
-        'Mandy-Barker---shoe0748_MC--jrm.png',
-        'Mandy-Barker---t9382_CE.png',
-        'Mandy-Barker---t9392_MC.png',
-        'Mandy-Barker---tC9386_AC.png',
-        'Mandy-Barker---tag_AC_2.png',
-        'Mandy-Barker---tag_AC_4.png',
-      ],
-      snowflake: [
-        'IMG_6170_CT.png',
-        'IMG_6176_CT_1.png',
-        'IMG_6176_CT_2.png',
-        'IMG_6176_CT_3.png',
-        'IMG_6178_MC.png',
-        'IMG_6180.png',
-        'IMG_6181_MC--AC.png',
-        'IMG_6182_MC.png',
-        'IMG_6190_MC.png',
-        'IMG_6192_CT--AC.png',
-        'IMG_6195_MC--MC.png',
-        'IMG_6198_CT_1.png',
-        'IMG_6198_CT_2.png',
-        'IMG_6198_CT_3.png',
-        'IMG_6201_MC.png',
-        'IMG_6203_MC--MC.png',
-        'IMG_6229_CT--jrm.png',
-        'IMG_6235_MC--MC.png',
-        'IMG_6247.png',
-        'IMG_6249.png',
-        'IMG_6250_CT.png',
-        'IMG_6255_MC--AC.png',
-        'IMG_6256_MC--AC.png',
-        'IMG_6268_MC.png',
-        'IMG_6269_MC.png',
-        'IMG_6270_MC--AC.png',
-        'comb6076_CT_1.png',
-        'comb6076_CT_3.png',
-        'comb6076_CT_4.png',
-        'ducktube6175_CT_1.png',
-        'ducktube6175_CT_2.png',
-        'ducktube6175_CT_3.png',
-        'fork6261_CT_1.png',
-        'fork6261_CT_2.png',
-        'fork6261_CT_3.png',
-        'fork6261_CT_4.png',
-        'fork6261_CT_5.png',
-        'fork6261_CT_6.png',
-        'fork6261_CT_7.png',
-      ],
-      where_am_i: [
-        'Mandy-Barker---3-ends440_AM.png',
-        'Mandy-Barker---3-ends440_AM_1.png',
-        'Mandy-Barker---3-ends440_AM_2.png',
-        'Mandy-Barker---3-ends440_AM_3.png',
-        'Mandy-Barker---ammend425_AM.png',
-        'Mandy-Barker---ammend430_gm.png',
-        'Mandy-Barker---blu-toptype402_AM_AM.png',
-        'Mandy-Barker---blue-swim382_AM.png',
-        'Mandy-Barker---bluetop328_AM.png',
-        'Mandy-Barker---brown-chiquito309_AM.png',
-        'Mandy-Barker---feather279_AM.png',
-        'Mandy-Barker---flying-pink410_AM.png',
-        'Mandy-Barker---ghost-face312_AM.png',
-        'Mandy-Barker---greentulip317_AM.png',
-        'Mandy-Barker---heart293_AM.png',
-        'Mandy-Barker---laid-down-octopus389_AM.png',
-        'Mandy-Barker---long-thin-blue!296_AC.png',
-        'Mandy-Barker---orange-deflate375_AM.png',
-        'Mandy-Barker---orange-folded340_JB.png',
-        'Mandy-Barker---orange-hole-side365_AC.png',
-        'Mandy-Barker---ostrich-clump273_AM.png',
-        'Mandy-Barker---pink-decomp-end378_AM.png',
-        'Mandy-Barker---purple-all412_AM.png',
-        'Mandy-Barker---silver-top344_AM.png',
-        'Mandy-Barker---small-burst-rose401_AM.png',
-        'Mandy-Barker---string-on-own270_AC.png',
-        'Mandy-Barker---translucent442_AC.png',
-        'Mandy-Barker---white-noose413_AM.png',
-        'Mandy-Barker---white313_AC.png',
-        'Mandy-Barker---yell-tri-purple-string306_AM.png',
-        'Mandy-Barker---yellow-octopus387_AC.png',
-        'Mandy-Barker---yellow-sculpture354_AM.png',
-        'Mandy-Barker---yellow-top322_AM.png',
-        'Mandy-Barker---yellowtorpedo305_AM.png',
-      ],
+      birds_nest: [1, 11],
+      hong_kong: [12, 29],
+      snowflake: [30, 68],
+      where_am_i: [69, 102],
     };
 
     const WORLD_MAP_SCENE = 'world_map';
-    const THEME_OUT = 0.1;
-    const THEME_IN = 0.06;
+    const THEME_OUT = 0.05;
+    const THEME_IN = 0.03;
     const CREDITS_SCALE = 1.65;
     function timeout(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -48651,6 +48545,8 @@ var app = (function (exports) {
             this.creditImg = null;
             this.beginButton = document.getElementById('begin');
             this.beginPane = document.getElementById('beginpane');
+            this.progressButton = document.getElementById('progressbutton');
+            this.progressElem = document.getElementById('progress');
             this.underwaterNoise = document.getElementById('underwater');
             this.introAudio = document.getElementById('intro1');
             this.outroAudio = document.getElementById('outro');
@@ -48664,6 +48560,7 @@ var app = (function (exports) {
             this.introImageContainer = document.getElementById('introimage');
             this.foregrounded = false;
             this.themeMusicAnimNumber = 1;
+            this.hookAssetLoader();
             this.beginButton.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
                 yield this.startWebAudio();
                 this.beginPane.classList.add('start');
@@ -48764,7 +48661,7 @@ var app = (function (exports) {
                 }, false);
                 this.hongkongAudio.components.sound.playSound();
                 setTimeout(() => {
-                    this.animateInForeground('Mandy-Barker---p9378_CE__jrm.dae');
+                    this.animateInForeground('#pandaasset');
                 }, 38000);
             }, 2000);
         }
@@ -48833,85 +48730,6 @@ var app = (function (exports) {
             }, 2000);
             this.renderScene(4);
         }
-        // async showTwoColumnText(
-        //   left: string,
-        //   right: string,
-        //   leftPad: number,
-        //   rightPad: number,
-        //   anim: number = 2000
-        // ) {
-        //   await this.removeText();
-        //   const text1 = this.makeText(left, 'right', anim, leftPad);
-        //   const text2 = this.makeText(right, 'left', anim, rightPad);
-        //   this.foregroundContainer.appendChild(text1);
-        //   this.foregroundContainer.appendChild(text2);
-        //   this.textEntities.push(text1);
-        //   this.textEntities.push(text2);
-        //   await timeout(anim);
-        // }
-        // makeText(value: string, align: string, anim: number, pad: number = 0): HTMLElement {
-        //   const text = document.createElement('a-text');
-        //   text.setAttribute('value', value);
-        //   text.setAttribute('font', 'aileronsemibold');
-        //   text.setAttribute('white-space', 'pre');
-        //   text.setAttribute('align', align);
-        //   text.setAttribute('anchor', 'center');
-        //   text.setAttribute('width', '40');
-        //   text.setAttribute('height', 'auto');
-        //   text.setAttribute('wrap-count', '80');
-        //   text.setAttribute('line-height', '40');
-        //   text.setAttribute('color', 'white');
-        //   text.setAttribute('shader', 'basic');
-        //   text.setAttribute('x-offset', `${pad}`);
-        //   text.setAttribute(
-        //     'animation__scale',
-        //     `property: scale; dur: ${anim}; from: ${CREDITS_SCALE - 0.5} ${CREDITS_SCALE -
-        //       0.5} ${CREDITS_SCALE - 0.5}; to: ${CREDITS_SCALE} ${CREDITS_SCALE} ${CREDITS_SCALE};`
-        //   );
-        //   text.setAttribute(
-        //     'animation__opacity',
-        //     `property: components.text.material.uniforms.opacity.value; dur: ${anim}; from: 0; to: 1;`
-        //   );
-        //   return text;
-        // }
-        // async showSimpleText(value: string, anim: number = 2000) {
-        //   await this.removeText();
-        //   const text = this.makeText(value, 'center', anim);
-        //   this.foregroundContainer.appendChild(text);
-        //   this.textEntities.push(text);
-        //   await timeout(anim);
-        // }
-        // removeText() {
-        //   return new Promise(resolve => {
-        //     if (this.textEntities.length == 0) {
-        //       resolve();
-        //       return;
-        //     }
-        //     this.textEntities.forEach(textEntity =>
-        //       textEntity.addEventListener('animationcomplete', e => {
-        //         if ((e as any).detail.name == 'animation__hide') {
-        //           remove(textEntity);
-        //           this.textEntities.splice(this.textEntities.indexOf(textEntity), 1);
-        //           if (this.textEntities.length == 0) resolve();
-        //           return;
-        //         }
-        //       })
-        //     );
-        //     this.textEntities.forEach(textEntity =>
-        //       textEntity.setAttribute(
-        //         'animation__hide',
-        //         'property: components.text.material.uniforms.opacity.value; dur: 2000; from: 1; to: 0;'
-        //       )
-        //     );
-        //   });
-        // }
-        // showSimpleText(value: string, anim: number = 2000) {
-        //   await this.removeText();
-        //   const text = this.makeText(value, 'center', anim);
-        //   this.foregroundContainer.appendChild(text);
-        //   this.textEntities.push(text);
-        //   await timeout(anim);
-        // }
         removeCredits() {
             return new Promise(resolve => {
                 if (this.creditImg == null) {
@@ -48957,57 +48775,21 @@ var app = (function (exports) {
             return __awaiter(this, void 0, void 0, function* () {
                 // Show credits
                 yield timeout(5000);
-                console.log('sky');
                 // Fade out sky
                 Array.from(this.skyContainer.children).forEach(sky => {
                     sky.setAttribute('animation__credits', 'property: components.material.material.opacity; from: 1; to: 0.25; dur: 2000');
                 });
-                console.log('show 1');
                 yield this.showCredits(1);
-                console.log('show 2');
-                // await this.showSimpleText(
-                //   'A project of the Graduate Program in Journalism 2019\nDepartment of Communication\nStanford University'
-                // );
                 yield timeout(10000);
                 yield this.showCredits(2);
-                // await this.showTwoColumnText(
-                //   'Photography\n\n\n\n\n\n',
-                //   "Photographs copyright Mandy Barker\n\nHong Kong Soup: 1826 - Poon Choi\nEVERY... Snowflake is Different\nWHERE... Am I Going\nSoup: Bird's Nest",
-                //   -25,
-                //   16.5
-                // );
                 yield timeout(13000);
                 yield this.showCredits(3);
-                // await this.showTwoColumnText(
-                //   'Experience design\n\nProduction\n\nMusic\n\n',
-                //   'Dylan Freedman\n\nDylan Freedman\n\n"Refuse"\nDylan Freedman',
-                //   -21.5,
-                //   19.9
-                // );
                 yield timeout(10000);
                 yield this.showCredits(4);
-                // await this.showTwoColumnText(
-                //   'Sound design\n\nScript writing\n\n\nVoiceover\n\n',
-                //   'Anthony J. Miller\n\nChristina Egerstrom, Amy Cruz,\nClaire Thompson\n\nAmy Cruz, Marta Oliver Craviotto,\nAnthony J. Miller',
-                //   -24,
-                //   17
-                // );
                 yield timeout(12000);
                 yield this.showCredits(5);
-                // await this.showTwoColumnText(
-                //   'Storyboard\n\nTechnical support',
-                //   'Anthony J. Miller\n\nJoseph Moreno, Jackie Botts',
-                //   -22.2,
-                //   18.8
-                // );
                 yield timeout(9000);
                 yield this.showCredits(6);
-                // await this.showTwoColumnText(
-                //   'Additional audio\n\n\nAdvisor\n\n',
-                //   'Tobin Asher\nStanford Virtual Human Interaction Lab\n\nProfessor Geri Migielicz\nHearst Professional in Residence',
-                //   -24.5,
-                //   16.5
-                // );
                 yield timeout(13000);
                 this.animateThemeMusic(0, 10000);
                 yield this.removeCredits();
@@ -49025,19 +48807,47 @@ var app = (function (exports) {
                 yield webAudioTouchUnlock(context);
             });
         }
+        loaded() {
+            this.progressButton.style.opacity = '0';
+            this.progressButton.style.pointerEvents = 'none';
+            this.beginButton.style.visibility = 'visible';
+        }
+        hookAssetLoader() {
+            const assets = Array.from(document.querySelector('a-assets').children);
+            const assetState = {};
+            let numLoaded = 0;
+            const assetLoaded = (asset) => {
+                if (!assetState[asset.id]) {
+                    numLoaded++;
+                    this.progressElem.style.right = `${(1 - Math.min(numLoaded / assets.length, 1)) * 100}%`;
+                }
+                assetState[asset.id] = true;
+                if (numLoaded == assets.length) {
+                    this.loaded();
+                }
+            };
+            assets.forEach((elem) => {
+                ['canplaythrough', 'load', 'loaded'].forEach(evt => {
+                    elem.addEventListener(evt, () => {
+                        assetLoaded(elem);
+                    });
+                });
+                if (elem.complete)
+                    assetLoaded(elem);
+            });
+        }
         /**
          * Create a foreground model.
          * @param model The string of the relative model URL to load.
          * @param rotation The rotation amount.
          */
-        createForeground(model = 'IMG_6192_CT--AC.dae', rotation = '90 0 45', callback) {
+        createForeground(model, rotation = '90 0 45', callback) {
             Array.from(this.foregroundContainer.children).forEach(child => remove(child));
             this.foreground = document.createElement('a-entity');
             this.foreground.addEventListener('model-loaded', () => {
                 callback();
             });
-            // this.foreground.setAttribute('collada-model', '#pandaasset');
-            this.foreground.setAttribute('collada-model-legacy', `url(models/${model})`);
+            this.foreground.setAttribute('collada-model-legacy', model);
             this.foreground.setAttribute('rotation', rotation);
             this.foreground.setAttribute('scale', '0 0 0');
             this.foreground.setAttribute('animation__rotation', 'property: rotation; dur: 35000; loop: true; from: 338 -430 267; to: 178 -270 107; dir: alternate');
@@ -49095,7 +48905,7 @@ var app = (function (exports) {
                 sky.addEventListener('materialtextureloaded', () => {
                     this.handleLoadFn();
                 });
-                sky.setAttribute('src', `images/composites/${scene}.png`);
+                sky.setAttribute('src', `#scene_${scene}`);
                 sky.setAttribute('backround', 'black');
                 sky.setAttribute('rotation', '0 0 0');
                 sky.setAttribute('material', 'opacity: 0');
@@ -49105,6 +48915,9 @@ var app = (function (exports) {
             }
             // Add spheres.
             if (renderSpheres) {
+                const sceneStart = IMAGES[scene][0];
+                const sceneEnd = IMAGES[scene][1];
+                const sceneObjects = sceneEnd - sceneStart + 1;
                 let i = 0;
                 for (const sphere of spheres) {
                     const image = document.createElement('a-image');
@@ -49115,13 +48928,7 @@ var app = (function (exports) {
                     image.addEventListener('materialtextureloaded', () => {
                         this.handleLoadFn();
                     });
-                    if (scene != WORLD_MAP_SCENE) {
-                        image.setAttribute('src', `images/${scene}/${IMAGES[scene][i % IMAGES[scene].length]}`);
-                    }
-                    else {
-                        let randomScene = this.scenes[Math.floor(Math.random() * (this.scenes.length - 1))];
-                        image.setAttribute('src', `images/${randomScene}/${IMAGES[randomScene][i % IMAGES[randomScene].length]}`);
-                    }
+                    image.setAttribute('src', `#object${(i % sceneObjects) + sceneStart}`);
                     const container = document.createElement('a-entity');
                     container.appendChild(image);
                     const radius = sphere.radius * constants.radiusDrawMultiplier;
@@ -49161,7 +48968,7 @@ var app = (function (exports) {
             // Get rid of foreground object.
             this.hideForeground();
         }
-        animateInForeground(path = 'Mandy-Barker---p9378_CE__jrm.dae', rotation = '190 0 45') {
+        animateInForeground(path = '#pandaasset', rotation = '190 0 45') {
             if (this.foregrounded)
                 return;
             this.foregrounded = true;

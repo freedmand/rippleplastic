@@ -108,6 +108,36 @@
       background: white;
       transition: all 4.5s ease;
     }
+
+    button#begin {
+      position: absolute;
+    }
+
+    button:disabled {
+      background: #cadcca;
+      z-index: 4;
+      color: transparent;
+      position: relative;
+      transition: all 0.6s ease;
+      cursor: auto;
+    }
+
+    button span {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 100%;
+      background: #83c15c;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 0 2px black;
+      transition: all 0.3s ease;
+    }
+
+    .a-loader-title {
+      display: none !important;
+    }
     </style>
 
     <script src="aframe.min.js"></script>
@@ -119,12 +149,15 @@
     <div class="begin" id="beginpane">
       <h1>Ripple</h1>
       <h2>The unintended life of plastics at sea</h2>
-      <div><button id="begin">Begin experience</button></div>
+      <div>
+        <button id="begin" style="visibility: hidden;">Begin experience</button>
+        <button id="progressbutton" aria-hidden="true" disabled>Begin experience<span id="progress"></span></button>
+      </div>
     </div>
 
     <!-- <div class="loader">Loading...</div> -->
-    <a-scene background="color: black" timeout="10000" render-order="background, midground, foreground">
-      <a-assets>
+    <a-scene background="color: black" loading-screen="dotsColor: black; backgroundColor: black" timeout="200000" render-order="background, midground, foreground">
+      <a-assets timeout="200000">
         <a-asset-item id="underwaterasset" src="sound/underwater.mp3" preload="auto" response-type="arraybuffer"></a-asset-item>
         <a-asset-item id="intro1asset" src="audio/intro.mp3" preload="auto" response-type="arraybuffer"></a-asset-item>
         <a-asset-item id="themeasset" src="sound/theme.mp3" response-type="arraybuffer"></a-asset-item>
@@ -132,12 +165,8 @@
         <a-asset-item id="snowflurryasset" src="audio/snowflurry.mp3" response-type="arraybuffer"></a-asset-item>
         <a-asset-item id="whereamiasset" src="audio/where_am_i.mp3" response-type="arraybuffer"></a-asset-item>
         <a-asset-item id="birdsnestasset" src="audio/birds_nest.mp3" response-type="arraybuffer"></a-asset-item>
-        <!-- <a-asset-item id="worldmapasset" src="audio/worldmap.mp3" response-type="arraybuffer"></a-asset-item> -->
-        <!-- <a-asset-item id="worldmapvideo" src="video/worldmap.mp4" response-type="arraybuffer"></a-asset-item> -->
         <a-asset-item id="outroasset" src="audio/outro.mp3" response-type="arraybuffer"></a-asset-item>
         
-        <!-- <a-asset-item id="pandaasset" src="models/Mandy-Barker---p9378_CE__jrm.dae"></a-asset-item> -->
-
         <video id="worldmapasset" loop="false" src="video/worldmap.mp4"></video>
 
         <img id="whatliesbeneath" src="images/intro/what_lies_beneath.png">
@@ -149,26 +178,124 @@
         <img id="credits5" src="images/credits/pg5.png">
         <img id="credits6" src="images/credits/pg6.png">
         
-        <!-- <img id="worldmap" src="images/world_map/map.png">
-        <img id="worldmapflattened" src="images/world_map/map_flattened.png">
+        <!-- Scenes -->
+        <img id="scene_birds_nest" src="images/composites/birds_nest.png">
+        <img id="scene_hong_kong" src="images/composites/hong_kong.png">
+        <img id="scene_snowflake" src="images/composites/snowflake.png">
+        <img id="scene_where_am_i" src="images/composites/where_am_i.png">
+        <img id="scene_world_map" src="images/composites/world_map.png">
 
-        <img id="imgmapsouthafrica" src="images/world_map/s_africa.png">
-        <img id="imgmaphawaii" src="images/world_map/hawaii.png">
-        <img id="imgmapjapan" src="images/world_map/japan.png">
-        <img id="imgmapmexico" src="images/world_map/mexico.png">
-        <img id="imgmapcuba" src="images/world_map/cuba.png">
-        <img id="imgmapbrazil" src="images/world_map/brazil.png">
-        <img id="imgmapcontinentalus" src="images/world_map/us.png">
-        <img id="imgmapengland" src="images/world_map/england.png">
-        <img id="imgmapcanada" src="images/world_map/canada.png">
-        <img id="imgmapchina" src="images/world_map/china.png">
-        <img id="imgmapaustralia" src="images/world_map/australia.png">
-        <img id="imgmapsweden" src="images/world_map/sweden.png">
-        <img id="imgmapiceland" src="images/world_map/iceland.png">
-        <img id="imgmapfrance" src="images/world_map/france.png">
-        <img id="imgmapspain" src="images/world_map/spain.png">
-        <img id="imgmapindia" src="images/world_map/india.png">
-        <img id="imggarbagepatch" src="images/world_map/garbagepatch.png"> -->
+        <!-- Birds nest -->
+        <img id="object1" src="images/birds_nest/g4309_AC.png">
+        <img id="object2" src="images/birds_nest/i4313.png">
+        <img id="object3" src="images/birds_nest/j4287.png">
+        <img id="object4" src="images/birds_nest/j4374_CT.png">
+        <img id="object5" src="images/birds_nest/k4333.png">
+        <img id="object6" src="images/birds_nest/m4277.png">
+        <img id="object7" src="images/birds_nest/o4332.png">
+        <img id="object8" src="images/birds_nest/p4281_AC.png">
+        <img id="object9" src="images/birds_nest/p_4397_AC.png">
+        <img id="object10" src="images/birds_nest/u4295_AC.png">
+        <img id="object11" src="images/birds_nest/y4284_AC--DF.png">
+
+        <!-- Hong Kong -->
+        <img id="object12" src="images/hong_kong/Mandy-Barker---boat0939_CE--AC.png">
+        <img id="object13" src="images/hong_kong/Mandy-Barker---dark-orange366_JB.png">
+        <img id="object14" src="images/hong_kong/Mandy-Barker---duck0973_CE.png">
+        <img id="object15" src="images/hong_kong/Mandy-Barker---fish0900_CE.png">
+        <img id="object16" src="images/hong_kong/Mandy-Barker---fishing0896_JB.png">
+        <img id="object17" src="images/hong_kong/Mandy-Barker---glasss0891-(1)_CE.png">
+        <img id="object18" src="images/hong_kong/Mandy-Barker---hand0858_CE--DF.png">
+        <img id="object19" src="images/hong_kong/Mandy-Barker---hand0864_CE.png">
+        <img id="object20" src="images/hong_kong/Mandy-Barker---p9378_CE__jrm.png">
+        <img id="object21" src="images/hong_kong/Mandy-Barker---rhino1495_MC--jrm.png">
+        <img id="object22" src="images/hong_kong/Mandy-Barker---ribbon0735_MC.png">
+        <img id="object23" src="images/hong_kong/Mandy-Barker---shoe0747_CE.png">
+        <img id="object24" src="images/hong_kong/Mandy-Barker---shoe0748_MC--jrm.png">
+        <img id="object25" src="images/hong_kong/Mandy-Barker---t9382_CE.png">
+        <img id="object26" src="images/hong_kong/Mandy-Barker---t9392_MC.png">
+        <img id="object27" src="images/hong_kong/Mandy-Barker---tC9386_AC.png">
+        <img id="object28" src="images/hong_kong/Mandy-Barker---tag_AC_2.png">
+        <img id="object29" src="images/hong_kong/Mandy-Barker---tag_AC_4.png">
+
+        <!-- Snowflake -->
+        <img id="object30" src="images/snowflake/IMG_6170_CT.png">
+        <img id="object31" src="images/snowflake/IMG_6176_CT_1.png">
+        <img id="object32" src="images/snowflake/IMG_6176_CT_2.png">
+        <img id="object33" src="images/snowflake/IMG_6176_CT_3.png">
+        <img id="object34" src="images/snowflake/IMG_6178_MC.png">
+        <img id="object35" src="images/snowflake/IMG_6180.png">
+        <img id="object36" src="images/snowflake/IMG_6181_MC--AC.png">
+        <img id="object37" src="images/snowflake/IMG_6182_MC.png">
+        <img id="object38" src="images/snowflake/IMG_6190_MC.png">
+        <img id="object39" src="images/snowflake/IMG_6192_CT--AC.png">
+        <img id="object40" src="images/snowflake/IMG_6195_MC--MC.png">
+        <img id="object41" src="images/snowflake/IMG_6198_CT_1.png">
+        <img id="object42" src="images/snowflake/IMG_6198_CT_2.png">
+        <img id="object43" src="images/snowflake/IMG_6198_CT_3.png">
+        <img id="object44" src="images/snowflake/IMG_6201_MC.png">
+        <img id="object45" src="images/snowflake/IMG_6203_MC--MC.png">
+        <img id="object46" src="images/snowflake/IMG_6229_CT--jrm.png">
+        <img id="object47" src="images/snowflake/IMG_6235_MC--MC.png">
+        <img id="object48" src="images/snowflake/IMG_6247.png">
+        <img id="object49" src="images/snowflake/IMG_6249.png">
+        <img id="object50" src="images/snowflake/IMG_6250_CT.png">
+        <img id="object51" src="images/snowflake/IMG_6255_MC--AC.png">
+        <img id="object52" src="images/snowflake/IMG_6256_MC--AC.png">
+        <img id="object53" src="images/snowflake/IMG_6268_MC.png">
+        <img id="object54" src="images/snowflake/IMG_6269_MC.png">
+        <img id="object55" src="images/snowflake/IMG_6270_MC--AC.png">
+        <img id="object56" src="images/snowflake/comb6076_CT_1.png">
+        <img id="object57" src="images/snowflake/comb6076_CT_3.png">
+        <img id="object58" src="images/snowflake/comb6076_CT_4.png">
+        <img id="object59" src="images/snowflake/ducktube6175_CT_1.png">
+        <img id="object60" src="images/snowflake/ducktube6175_CT_2.png">
+        <img id="object61" src="images/snowflake/ducktube6175_CT_3.png">
+        <img id="object62" src="images/snowflake/fork6261_CT_1.png">
+        <img id="object63" src="images/snowflake/fork6261_CT_2.png">
+        <img id="object64" src="images/snowflake/fork6261_CT_3.png">
+        <img id="object65" src="images/snowflake/fork6261_CT_4.png">
+        <img id="object66" src="images/snowflake/fork6261_CT_5.png">
+        <img id="object67" src="images/snowflake/fork6261_CT_6.png">
+        <img id="object68" src="images/snowflake/fork6261_CT_7.png">
+
+        <!-- Where am I -->
+        <img id="object69" src="images/where_am_i/Mandy-Barker---3-ends440_AM.png">
+        <img id="object70" src="images/where_am_i/Mandy-Barker---3-ends440_AM_1.png">
+        <img id="object71" src="images/where_am_i/Mandy-Barker---3-ends440_AM_2.png">
+        <img id="object72" src="images/where_am_i/Mandy-Barker---3-ends440_AM_3.png">
+        <img id="object73" src="images/where_am_i/Mandy-Barker---ammend425_AM.png">
+        <img id="object74" src="images/where_am_i/Mandy-Barker---ammend430_gm.png">
+        <img id="object75" src="images/where_am_i/Mandy-Barker---blu-toptype402_AM_AM.png">
+        <img id="object76" src="images/where_am_i/Mandy-Barker---blue-swim382_AM.png">
+        <img id="object77" src="images/where_am_i/Mandy-Barker---bluetop328_AM.png">
+        <img id="object78" src="images/where_am_i/Mandy-Barker---brown-chiquito309_AM.png">
+        <img id="object79" src="images/where_am_i/Mandy-Barker---feather279_AM.png">
+        <img id="object80" src="images/where_am_i/Mandy-Barker---flying-pink410_AM.png">
+        <img id="object81" src="images/where_am_i/Mandy-Barker---ghost-face312_AM.png">
+        <img id="object82" src="images/where_am_i/Mandy-Barker---greentulip317_AM.png">
+        <img id="object83" src="images/where_am_i/Mandy-Barker---heart293_AM.png">
+        <img id="object84" src="images/where_am_i/Mandy-Barker---laid-down-octopus389_AM.png">
+        <img id="object85" src="images/where_am_i/Mandy-Barker---long-thin-blue!296_AC.png">
+        <img id="object86" src="images/where_am_i/Mandy-Barker---orange-deflate375_AM.png">
+        <img id="object87" src="images/where_am_i/Mandy-Barker---orange-folded340_JB.png">
+        <img id="object88" src="images/where_am_i/Mandy-Barker---orange-hole-side365_AC.png">
+        <img id="object89" src="images/where_am_i/Mandy-Barker---ostrich-clump273_AM.png">
+        <img id="object90" src="images/where_am_i/Mandy-Barker---pink-decomp-end378_AM.png">
+        <img id="object91" src="images/where_am_i/Mandy-Barker---purple-all412_AM.png">
+        <img id="object92" src="images/where_am_i/Mandy-Barker---silver-top344_AM.png">
+        <img id="object93" src="images/where_am_i/Mandy-Barker---small-burst-rose401_AM.png">
+        <img id="object94" src="images/where_am_i/Mandy-Barker---string-on-own270_AC.png">
+        <img id="object95" src="images/where_am_i/Mandy-Barker---translucent442_AC.png">
+        <img id="object96" src="images/where_am_i/Mandy-Barker---white-noose413_AM.png">
+        <img id="object97" src="images/where_am_i/Mandy-Barker---white313_AC.png">
+        <img id="object98" src="images/where_am_i/Mandy-Barker---yell-tri-purple-string306_AM.png">
+        <img id="object99" src="images/where_am_i/Mandy-Barker---yellow-octopus387_AC.png">
+        <img id="object100" src="images/where_am_i/Mandy-Barker---yellow-sculpture354_AM.png">
+        <img id="object101" src="images/where_am_i/Mandy-Barker---yellow-top322_AM.png">
+        <img id="object102" src="images/where_am_i/Mandy-Barker---yellowtorpedo305_AM.png">
+
+        <a-asset-item id="pandaasset" src="models/Mandy-Barker---p9378_CE__jrm.dae"></a-asset-item>
       </a-assets>
 
       <a-entity id="underwater" position="0 0 0" sound="src: #underwaterasset; positional: false; autoplay: true; loop: true; volume: 0.4"></a-entity>
@@ -180,7 +307,6 @@
       <a-entity id="birdsnest" position="0 0 0" sound="src: #birdsnestasset; positional: false; autoplay: false; loop: false; volume: 0.7"></a-entity>
       
       <a-entity id="outro" position="0 0 0" sound="src: #outroasset; autoplay: false; loop: false; volume: 0.7"></a-entity>
-
 
       <a-entity render-order="foreground" position="0 0 0" camera look-controls>
         <a-video id="worldmapvideo" visible="false" src="#worldmapasset" width="16" height="4" position="0 0 -7"></a-video>
