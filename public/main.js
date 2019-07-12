@@ -48481,7 +48481,6 @@ var app = (function (exports) {
         disposeObject3D(elem.object3D);
         elem.parentElement.removeChild(elem);
     }
-    //# sourceMappingURL=helpers.js.map
 
     var dist = createCommonjsModule(function (module, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -48630,6 +48629,7 @@ var app = (function (exports) {
     const WORLD_MAP_SCENE = 'world_map';
     const THEME_OUT = 0.1;
     const THEME_IN = 0.06;
+    const CREDITS_SCALE = 1.65;
     function timeout(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -48646,7 +48646,9 @@ var app = (function (exports) {
             this.scenes = ['hong_kong', 'snowflake', 'where_am_i', 'birds_nest', WORLD_MAP_SCENE];
             this.activeScene = 0;
             this.renderedEntities = [];
-            this.textEntities = [];
+            // textEntities: HTMLElement[] = [];
+            this.creditContainer = document.getElementById('creditsimages');
+            this.creditImg = null;
             this.beginButton = document.getElementById('begin');
             this.beginPane = document.getElementById('beginpane');
             this.underwaterNoise = document.getElementById('underwater');
@@ -48659,21 +48661,15 @@ var app = (function (exports) {
             this.birdsNestAudio = document.getElementById('birdsnest');
             this.worldMapVideo = document.getElementById('worldmapvideo');
             this.worldMapAsset = document.getElementById('worldmapasset');
+            this.introImageContainer = document.getElementById('introimage');
             this.foregrounded = false;
             this.themeMusicAnimNumber = 1;
             this.beginButton.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
                 yield this.startWebAudio();
                 this.beginPane.classList.add('start');
                 setTimeout(() => document.body.removeChild(this.beginPane), 5000);
-                // this.intro();
-                // this.worldmap();
-                // this.animateThemeMusic(0, 10000);
-                this.renderScene(4);
-                setTimeout(() => this.credits(), 2000);
-                // this.credits();
+                this.intro();
             }), false);
-            // Render one scene at a time
-            this.renderScene(this.activeScene);
             // Register event listeners.
             this.registerEvents();
         }
@@ -48702,14 +48698,51 @@ var app = (function (exports) {
                 this.outro();
             });
         }
+        showIntroImage() {
+            return new Promise(resolve => {
+                const introImage = document.createElement('a-image');
+                introImage.setAttribute('src', '#whatliesbeneath');
+                introImage.setAttribute('width', '9');
+                introImage.setAttribute('height', '6');
+                introImage.setAttribute('position', '0 0 -12');
+                introImage.setAttribute('opacity', '0');
+                introImage.addEventListener('animationcomplete', e => {
+                    console.log('anim complete', e);
+                    if (e.detail.name == 'animation__introfadein') {
+                        setTimeout(() => {
+                            this.activeScene = 0;
+                            this.renderScene(this.activeScene, true, false, false);
+                            introImage.setAttribute('animation__fadeOut', 'property: components.material.material.opacity; from: 1; to: 0; dur: 2000; delay: 4000;');
+                        }, 2000);
+                    }
+                    if (e.detail.name == 'animation__fadeOut') {
+                        remove(introImage);
+                        resolve();
+                        return;
+                    }
+                });
+                introImage.setAttribute('animation__introfadein', 'property: components.material.material.opacity; to: 1; dur: 2000; delay: 3000;');
+                this.introImageContainer.appendChild(introImage);
+            });
+        }
         intro() {
-            this.underwaterNoise.setAttribute('animation__underwaterFade', `property: sound.volume; to: ${THEME_OUT}; dur: 2000`);
-            setTimeout(() => {
-                this.introAudio.addEventListener('sound-ended', () => {
-                    this.theme();
-                }, false);
-                this.introAudio.components.sound.playSound();
-            }, 2000);
+            return __awaiter(this, void 0, void 0, function* () {
+                // Destroy remnants.
+                this.activeScene = 0;
+                this.renderScene(this.activeScene, false, false, true);
+                yield this.showIntroImage();
+                this.activeScene = 0;
+                this.renderScene(this.activeScene, false, true, false);
+                this.underwaterNoise.setAttribute('animation__underwaterFade', `property: sound.volume; to: ${THEME_OUT}; dur: 2000`
+                // `property: sound.volume; to: 0; dur: 2000`
+                );
+                setTimeout(() => {
+                    this.introAudio.addEventListener('sound-ended', () => {
+                        this.theme();
+                    }, false);
+                    this.introAudio.components.sound.playSound();
+                }, 3000);
+            });
         }
         theme() {
             this.themeSong.components.sound.playSound();
@@ -48793,7 +48826,6 @@ var app = (function (exports) {
                 this.outroAudio.addEventListener('sound-ended', () => {
                     this.animateThemeMusic(THEME_OUT);
                     setTimeout(() => {
-                        this.animateThemeMusic(0, 10000);
                         this.credits();
                     }, 5000);
                 }, false);
@@ -48801,90 +48833,190 @@ var app = (function (exports) {
             }, 2000);
             this.renderScene(4);
         }
-        showTwoColumnText(left, right, leftPad, rightPad, anim = 2000) {
-            return __awaiter(this, void 0, void 0, function* () {
-                yield this.removeText();
-                const text1 = this.makeText(left, 'right', anim, leftPad);
-                const text2 = this.makeText(right, 'left', anim, rightPad);
-                this.foregroundContainer.appendChild(text1);
-                this.foregroundContainer.appendChild(text2);
-                this.renderedEntities.push(text1);
-                this.renderedEntities.push(text2);
-                this.textEntities.push(text1);
-                this.textEntities.push(text2);
-                yield timeout(anim);
-            });
-        }
-        makeText(value, align, anim, pad = 0) {
-            const text = document.createElement('a-text');
-            text.setAttribute('value', value);
-            text.setAttribute('font', 'aileronsemibold');
-            text.setAttribute('white-space', 'pre');
-            text.setAttribute('align', align);
-            text.setAttribute('anchor', 'center');
-            text.setAttribute('width', '40');
-            text.setAttribute('height', 'auto');
-            text.setAttribute('wrap-count', '80');
-            text.setAttribute('line-height', '40');
-            text.setAttribute('color', 'white');
-            text.setAttribute('x-offset', `${pad}`);
-            text.setAttribute('animation__scale', `property: scale; dur: ${anim}; from: 0.65 0.65 0.65; to: 0.7 0.7 0.7;`);
-            text.setAttribute('animation__opacity', `property: components.text.material.uniforms.opacity.value; dur: ${anim}; from: 0; to: 1;`);
-            return text;
-        }
-        showSimpleText(value, anim = 2000) {
-            return __awaiter(this, void 0, void 0, function* () {
-                yield this.removeText();
-                const text = this.makeText(value, 'center', anim);
-                this.foregroundContainer.appendChild(text);
-                this.renderedEntities.push(text);
-                this.textEntities.push(text);
-                yield timeout(anim);
-            });
-        }
-        removeText() {
+        // async showTwoColumnText(
+        //   left: string,
+        //   right: string,
+        //   leftPad: number,
+        //   rightPad: number,
+        //   anim: number = 2000
+        // ) {
+        //   await this.removeText();
+        //   const text1 = this.makeText(left, 'right', anim, leftPad);
+        //   const text2 = this.makeText(right, 'left', anim, rightPad);
+        //   this.foregroundContainer.appendChild(text1);
+        //   this.foregroundContainer.appendChild(text2);
+        //   this.textEntities.push(text1);
+        //   this.textEntities.push(text2);
+        //   await timeout(anim);
+        // }
+        // makeText(value: string, align: string, anim: number, pad: number = 0): HTMLElement {
+        //   const text = document.createElement('a-text');
+        //   text.setAttribute('value', value);
+        //   text.setAttribute('font', 'aileronsemibold');
+        //   text.setAttribute('white-space', 'pre');
+        //   text.setAttribute('align', align);
+        //   text.setAttribute('anchor', 'center');
+        //   text.setAttribute('width', '40');
+        //   text.setAttribute('height', 'auto');
+        //   text.setAttribute('wrap-count', '80');
+        //   text.setAttribute('line-height', '40');
+        //   text.setAttribute('color', 'white');
+        //   text.setAttribute('shader', 'basic');
+        //   text.setAttribute('x-offset', `${pad}`);
+        //   text.setAttribute(
+        //     'animation__scale',
+        //     `property: scale; dur: ${anim}; from: ${CREDITS_SCALE - 0.5} ${CREDITS_SCALE -
+        //       0.5} ${CREDITS_SCALE - 0.5}; to: ${CREDITS_SCALE} ${CREDITS_SCALE} ${CREDITS_SCALE};`
+        //   );
+        //   text.setAttribute(
+        //     'animation__opacity',
+        //     `property: components.text.material.uniforms.opacity.value; dur: ${anim}; from: 0; to: 1;`
+        //   );
+        //   return text;
+        // }
+        // async showSimpleText(value: string, anim: number = 2000) {
+        //   await this.removeText();
+        //   const text = this.makeText(value, 'center', anim);
+        //   this.foregroundContainer.appendChild(text);
+        //   this.textEntities.push(text);
+        //   await timeout(anim);
+        // }
+        // removeText() {
+        //   return new Promise(resolve => {
+        //     if (this.textEntities.length == 0) {
+        //       resolve();
+        //       return;
+        //     }
+        //     this.textEntities.forEach(textEntity =>
+        //       textEntity.addEventListener('animationcomplete', e => {
+        //         if ((e as any).detail.name == 'animation__hide') {
+        //           remove(textEntity);
+        //           this.textEntities.splice(this.textEntities.indexOf(textEntity), 1);
+        //           if (this.textEntities.length == 0) resolve();
+        //           return;
+        //         }
+        //       })
+        //     );
+        //     this.textEntities.forEach(textEntity =>
+        //       textEntity.setAttribute(
+        //         'animation__hide',
+        //         'property: components.text.material.uniforms.opacity.value; dur: 2000; from: 1; to: 0;'
+        //       )
+        //     );
+        //   });
+        // }
+        // showSimpleText(value: string, anim: number = 2000) {
+        //   await this.removeText();
+        //   const text = this.makeText(value, 'center', anim);
+        //   this.foregroundContainer.appendChild(text);
+        //   this.textEntities.push(text);
+        //   await timeout(anim);
+        // }
+        removeCredits() {
             return new Promise(resolve => {
-                if (this.textEntities.length == 0) {
+                if (this.creditImg == null) {
                     resolve();
                     return;
                 }
-                this.textEntities.forEach(textEntity => textEntity.addEventListener('animationcomplete', e => {
+                this.creditImg.addEventListener('animationcomplete', e => {
                     if (e.detail.name == 'animation__hide') {
-                        remove(textEntity);
-                        this.textEntities.splice(this.textEntities.indexOf(textEntity), 1);
-                        if (this.textEntities.length == 0)
-                            resolve();
+                        remove(this.creditImg);
+                        this.creditImg = null;
+                        resolve();
                         return;
                     }
-                }));
-                this.textEntities.forEach(textEntity => textEntity.setAttribute('animation__hide', 'property: components.text.material.uniforms.opacity.value; dur: 2000; from: 1; to: 0;'));
+                });
+                this.creditImg.setAttribute('animation__hide', 'property: components.material.material.opacity; dur: 2000; from: 1; to: 0;');
+            });
+        }
+        showCredits(num) {
+            return new Promise(resolve => {
+                this.removeCredits().then(() => {
+                    const creditImg = document.createElement('a-image');
+                    creditImg.setAttribute('src', `#credits${num}`);
+                    creditImg.setAttribute('width', '9');
+                    creditImg.setAttribute('height', '3');
+                    creditImg.setAttribute('position', '0 0 -12');
+                    creditImg.setAttribute('opacity', '0');
+                    creditImg.addEventListener('animationcomplete', e => {
+                        if (e.detail.name == 'animation__opacity') {
+                            resolve();
+                            return;
+                        }
+                    });
+                    creditImg.setAttribute('animation__scale', `property: scale; dur: 2000; from: ${CREDITS_SCALE * 0.95} ${CREDITS_SCALE *
+                    0.95} ${CREDITS_SCALE *
+                    0.95}; to: ${CREDITS_SCALE} ${CREDITS_SCALE} ${CREDITS_SCALE};`);
+                    creditImg.setAttribute('animation__opacity', `property: components.material.material.opacity; dur: 2000; from: 0; to: 1;`);
+                    this.creditImg = creditImg;
+                    this.creditContainer.appendChild(this.creditImg);
+                });
             });
         }
         credits() {
             return __awaiter(this, void 0, void 0, function* () {
                 // Show credits
                 yield timeout(5000);
+                console.log('sky');
                 // Fade out sky
                 Array.from(this.skyContainer.children).forEach(sky => {
                     sky.setAttribute('animation__credits', 'property: components.material.material.opacity; from: 1; to: 0.25; dur: 2000');
                 });
-                yield this.showSimpleText('A project of the Graduate Program in Journalism 2019\nDepartment of Communication\nStanford University');
+                console.log('show 1');
+                yield this.showCredits(1);
+                console.log('show 2');
+                // await this.showSimpleText(
+                //   'A project of the Graduate Program in Journalism 2019\nDepartment of Communication\nStanford University'
+                // );
                 yield timeout(10000);
-                yield this.showTwoColumnText('Photography\n\n\n\n\n\n', "(c) Mandy Barker\n\nHong Kong Soup: 1826 - Poon Choi\nEVERY... Snowflake is Dfferent\nWHERE...Am I Going\nSoup: Bird's Nest", -25, 16.5);
+                yield this.showCredits(2);
+                // await this.showTwoColumnText(
+                //   'Photography\n\n\n\n\n\n',
+                //   "Photographs copyright Mandy Barker\n\nHong Kong Soup: 1826 - Poon Choi\nEVERY... Snowflake is Different\nWHERE... Am I Going\nSoup: Bird's Nest",
+                //   -25,
+                //   16.5
+                // );
                 yield timeout(13000);
-                yield this.showTwoColumnText('Experience design\n\nProduction\n\nMusic\n\n', 'Dylan Freedman\n\nDylan Freedman\n\n"Refuse"\nDylan Freedman', -21.5, 19.9);
+                yield this.showCredits(3);
+                // await this.showTwoColumnText(
+                //   'Experience design\n\nProduction\n\nMusic\n\n',
+                //   'Dylan Freedman\n\nDylan Freedman\n\n"Refuse"\nDylan Freedman',
+                //   -21.5,
+                //   19.9
+                // );
                 yield timeout(10000);
-                yield this.showTwoColumnText('Sound design\n\nScript writing\n\n\nVoiceover\n\n', 'Anthony J. Miller\n\nChristina Egerstrom, Amy Cruz,\nClaire Thompson\n\nAmy Cruz, Marta Oliver Craviotto,\nAnthony J. Miller', -24, 17);
+                yield this.showCredits(4);
+                // await this.showTwoColumnText(
+                //   'Sound design\n\nScript writing\n\n\nVoiceover\n\n',
+                //   'Anthony J. Miller\n\nChristina Egerstrom, Amy Cruz,\nClaire Thompson\n\nAmy Cruz, Marta Oliver Craviotto,\nAnthony J. Miller',
+                //   -24,
+                //   17
+                // );
                 yield timeout(12000);
-                yield this.showTwoColumnText('Storyboard\n\nTechnical support', 'Anthony J. Miller\n\nJoseph Moreno, Jackie Botts', -22.2, 18.8);
+                yield this.showCredits(5);
+                // await this.showTwoColumnText(
+                //   'Storyboard\n\nTechnical support',
+                //   'Anthony J. Miller\n\nJoseph Moreno, Jackie Botts',
+                //   -22.2,
+                //   18.8
+                // );
                 yield timeout(9000);
-                yield this.showTwoColumnText('Additional audio\n\n\nAdvisor\n\n', 'Tobin Asher\nStanford Virtual Human Interaction Lab\n\nProfessor Geri Migielicz\nHearst Professional in Residence', -24.5, 16.5);
+                yield this.showCredits(6);
+                // await this.showTwoColumnText(
+                //   'Additional audio\n\n\nAdvisor\n\n',
+                //   'Tobin Asher\nStanford Virtual Human Interaction Lab\n\nProfessor Geri Migielicz\nHearst Professional in Residence',
+                //   -24.5,
+                //   16.5
+                // );
                 yield timeout(13000);
-                yield this.removeText();
+                this.animateThemeMusic(0, 10000);
+                yield this.removeCredits();
                 // Fade out sky entirely
-                Array.from(this.skyContainer.children).forEach(sky => {
-                    sky.setAttribute('animation__credits', 'property: components.material.material.opacity; from: 0.25; to: 0; dur: 2000');
-                });
+                this.destroyRendered(() => __awaiter(this, void 0, void 0, function* () {
+                    yield timeout(8000);
+                    // Loop the experience
+                    this.intro();
+                }));
             });
         }
         startWebAudio() {
@@ -48909,7 +49041,7 @@ var app = (function (exports) {
             this.foreground.setAttribute('rotation', rotation);
             this.foreground.setAttribute('scale', '0 0 0');
             this.foreground.setAttribute('animation__rotation', 'property: rotation; dur: 35000; loop: true; from: 338 -430 267; to: 178 -270 107; dir: alternate');
-            this.foreground.setAttribute('animation__scale', 'property: scale; dur: 1500; to: 0.8 0.8 0.8; easing: easeInQuad');
+            this.foreground.setAttribute('animation__scale', 'property: scale; dur: 1500; to: 0.55 0.55 0.55; easing: easeInQuad');
             this.foregroundContainer.appendChild(this.foreground);
         }
         hideForeground() {
@@ -48939,14 +49071,16 @@ var app = (function (exports) {
             }
             callback();
         }
-        renderScene(idx) {
-            let toDestroy = this.renderedEntities.length;
-            if (toDestroy > 0) {
-                this.destroyRendered(() => this.renderScene(idx));
-                return;
+        renderScene(idx, renderSky = true, renderSpheres = true, destroy = true) {
+            if (destroy) {
+                let toDestroy = this.renderedEntities.length;
+                if (toDestroy > 0) {
+                    this.destroyRendered(() => this.renderScene(idx));
+                    return;
+                }
             }
             const scene = this.scenes[idx];
-            const spheres = scene == WORLD_MAP_SCENE ? [] : poissonDisk();
+            const spheres = scene == WORLD_MAP_SCENE || !renderSpheres ? [] : poissonDisk();
             let loadCounter = 0;
             this.handleLoadFn = () => {
                 loadCounter++;
@@ -48956,47 +49090,52 @@ var app = (function (exports) {
                         this.loadingCallback();
                 }
             };
-            const sky = document.createElement('a-sky');
-            sky.addEventListener('materialtextureloaded', () => {
-                this.handleLoadFn();
-            });
-            sky.setAttribute('src', `images/composites/${scene}.png`);
-            sky.setAttribute('backround', 'black');
-            sky.setAttribute('rotation', '0 0 0');
-            sky.setAttribute('material', 'opacity: 0');
-            sky.setAttribute('animation__opacity', 'startEvents: materialtextureloaded; property: components.material.material.opacity; to: 1; dur: 5000');
-            this.skyContainer.appendChild(sky);
-            this.renderedEntities.push(sky);
-            // Add spheres.
-            let i = 0;
-            for (const sphere of spheres) {
-                const image = document.createElement('a-image');
-                image.setAttribute('opacity', '0');
-                image.setAttribute('material', 'alphaTest: 0.0001');
-                image.setAttribute('animation__opacity', 'startEvents: materialtextureloaded; property: components.material.material.opacity; to: 1; dur: 2000');
-                image.addEventListener('materialtextureloaded', () => {
+            if (renderSky) {
+                const sky = document.createElement('a-sky');
+                sky.addEventListener('materialtextureloaded', () => {
                     this.handleLoadFn();
                 });
-                if (scene != WORLD_MAP_SCENE) {
-                    image.setAttribute('src', `images/${scene}/${IMAGES[scene][i % IMAGES[scene].length]}`);
+                sky.setAttribute('src', `images/composites/${scene}.png`);
+                sky.setAttribute('backround', 'black');
+                sky.setAttribute('rotation', '0 0 0');
+                sky.setAttribute('material', 'opacity: 0');
+                sky.setAttribute('animation__opacity', 'startEvents: materialtextureloaded; property: components.material.material.opacity; to: 1; dur: 5000');
+                this.skyContainer.appendChild(sky);
+                this.renderedEntities.push(sky);
+            }
+            // Add spheres.
+            if (renderSpheres) {
+                let i = 0;
+                for (const sphere of spheres) {
+                    const image = document.createElement('a-image');
+                    image.setAttribute('opacity', '0');
+                    image.setAttribute('material', 'alphaTest: 0.0001');
+                    image.setAttribute('animation__opacity', 'startEvents: materialtextureloaded; property: components.material.material.opacity; to: 1; dur: 2000');
+                    image.setAttribute('render-order', 'midground');
+                    image.addEventListener('materialtextureloaded', () => {
+                        this.handleLoadFn();
+                    });
+                    if (scene != WORLD_MAP_SCENE) {
+                        image.setAttribute('src', `images/${scene}/${IMAGES[scene][i % IMAGES[scene].length]}`);
+                    }
+                    else {
+                        let randomScene = this.scenes[Math.floor(Math.random() * (this.scenes.length - 1))];
+                        image.setAttribute('src', `images/${randomScene}/${IMAGES[randomScene][i % IMAGES[randomScene].length]}`);
+                    }
+                    const container = document.createElement('a-entity');
+                    container.appendChild(image);
+                    const radius = sphere.radius * constants.radiusDrawMultiplier;
+                    container.setAttribute('position', `${sphere.x} ${sphere.y} ${sphere.z}`);
+                    image.setAttribute('rotation', `0 0 ${Math.random() * 360}`);
+                    image.setAttribute('scale', `${radius} ${radius} ${radius}`);
+                    container.setAttribute('look-at', '[camera]');
+                    this.aframeScene.appendChild(container);
+                    i++;
+                    if (!this.activeScene) {
+                        container.style.display = 'none';
+                    }
+                    this.renderedEntities.push(container);
                 }
-                else {
-                    let randomScene = this.scenes[Math.floor(Math.random() * (this.scenes.length - 1))];
-                    image.setAttribute('src', `images/${randomScene}/${IMAGES[randomScene][i % IMAGES[randomScene].length]}`);
-                }
-                const container = document.createElement('a-entity');
-                container.appendChild(image);
-                const radius = sphere.radius * constants.radiusDrawMultiplier;
-                container.setAttribute('position', `${sphere.x} ${sphere.y} ${sphere.z}`);
-                image.setAttribute('rotation', `0 0 ${Math.random() * 360}`);
-                image.setAttribute('scale', `${radius} ${radius} ${radius}`);
-                container.setAttribute('look-at', '[camera]');
-                this.aframeScene.appendChild(container);
-                i++;
-                if (!this.activeScene) {
-                    container.style.display = 'none';
-                }
-                this.renderedEntities.push(container);
             }
         }
         toggleStats() {

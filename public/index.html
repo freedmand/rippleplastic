@@ -123,7 +123,7 @@
     </div>
 
     <!-- <div class="loader">Loading...</div> -->
-    <a-scene background="color: black" timeout="10000" render-order="background, foreground">
+    <a-scene background="color: black" timeout="10000" render-order="background, midground, foreground">
       <a-assets>
         <a-asset-item id="underwaterasset" src="sound/underwater.mp3" preload="auto" response-type="arraybuffer"></a-asset-item>
         <a-asset-item id="intro1asset" src="audio/intro.mp3" preload="auto" response-type="arraybuffer"></a-asset-item>
@@ -139,6 +139,15 @@
         <!-- <a-asset-item id="pandaasset" src="models/Mandy-Barker---p9378_CE__jrm.dae"></a-asset-item> -->
 
         <video id="worldmapasset" loop="false" src="video/worldmap.mp4"></video>
+
+        <img id="whatliesbeneath" src="images/intro/what_lies_beneath.png">
+
+        <img id="credits1" src="images/credits/pg1.png">
+        <img id="credits2" src="images/credits/pg2.png">
+        <img id="credits3" src="images/credits/pg3.png">
+        <img id="credits4" src="images/credits/pg4.png">
+        <img id="credits5" src="images/credits/pg5.png">
+        <img id="credits6" src="images/credits/pg6.png">
         
         <!-- <img id="worldmap" src="images/world_map/map.png">
         <img id="worldmapflattened" src="images/world_map/map_flattened.png">
@@ -162,24 +171,26 @@
         <img id="imggarbagepatch" src="images/world_map/garbagepatch.png"> -->
       </a-assets>
 
-      <a-entity id="underwater" position="0 0 -2" sound="src: #underwaterasset; autoplay: true; loop: true; volume: 0.4"></a-entity>
-      <a-entity id="intro1" position="0 0 0" sound="src: #intro1asset; autoplay: false; loop: false; volume: 0.7"></a-entity>
-      <a-entity id="theme" position="0 0 2" sound="src: #themeasset; autoplay: false; loop: true; volume: 0;"></a-entity>
-      <a-entity id="hongkong" position="0 0 0" sound="src: #hongkongasset; autoplay: false; loop: false; volume: 0.7"></a-entity>
-      <a-entity id="snowflurry" position="0 0 0" sound="src: #snowflurryasset; autoplay: false; loop: false; volume: 0.7"></a-entity>
-      <a-entity id="whereami" position="0 0 0" sound="src: #whereamiasset; autoplay: false; loop: false; volume: 0.7"></a-entity>
-      <a-entity id="birdsnest" position="0 0 0" sound="src: #birdsnestasset; autoplay: false; loop: false; volume: 0.7"></a-entity>
+      <a-entity id="underwater" position="0 0 0" sound="src: #underwaterasset; positional: false; autoplay: true; loop: true; volume: 0.4"></a-entity>
+      <a-entity id="intro1" position="0 0 0" sound="src: #intro1asset; positional: false; autoplay: false; loop: false; volume: 0.7"></a-entity>
+      <a-entity id="theme" position="0 0 0" sound="src: #themeasset; positional: false; autoplay: false; loop: true; volume: 0;"></a-entity>
+      <a-entity id="hongkong" position="0 0 0" sound="src: #hongkongasset; positional: false; autoplay: false; loop: false; volume: 0.7"></a-entity>
+      <a-entity id="snowflurry" position="0 0 0" sound="src: #snowflurryasset; positional: false; autoplay: false; loop: false; volume: 0.7"></a-entity>
+      <a-entity id="whereami" position="0 0 0" sound="src: #whereamiasset; positional: false; autoplay: false; loop: false; volume: 0.7"></a-entity>
+      <a-entity id="birdsnest" position="0 0 0" sound="src: #birdsnestasset; positional: false; autoplay: false; loop: false; volume: 0.7"></a-entity>
       
-      <!-- <a-entity id="" position="0 0 0" sound="src: #worldmapasset; autoplay: false; loop: false; volume: 0.7"></a-entity> -->
       <a-entity id="outro" position="0 0 0" sound="src: #outroasset; autoplay: false; loop: false; volume: 0.7"></a-entity>
 
+
       <a-entity render-order="foreground" position="0 0 0" camera look-controls>
-        <a-video id="worldmapvideo" visible="false" src="#worldmapasset" width="16" height="4" position="0 0 -4"></a-video>
+        <a-video id="worldmapvideo" visible="false" src="#worldmapasset" width="16" height="4" position="0 0 -7"></a-video>
+        <a-entity id="introimage"></a-entity>
+        <a-entity id="creditsimages"></a-entity>
         <a-entity id="foreground-container" position="0 0 -10" look-at="[camera]">
         </a-entity>
       </a-entity>
 
-      <a-entity render-order="background" id="sky-container" animation__rotation="property: rotation; dur: 700000; to: 130 360 -70; easing: linear; loop: true">
+      <a-entity render-order="background" id="sky-container" animation__rotation="property: rotation; dur: 327600000; to: 60840 168480 -32760; easing: linear; loop: true">
       </a-entity>
     </a-scene>
     <script src="main.js"></script>
