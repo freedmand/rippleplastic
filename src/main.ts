@@ -6,10 +6,15 @@ import IMAGES from './images.js';
 
 const WORLD_MAP_SCENE = 'world_map';
 
+// const THEME_OUT = 0.05;
+// const THEME_IN = 0.03;
 const THEME_OUT = 0.05;
 const THEME_IN = 0.03;
 
 const CREDITS_SCALE = 1.65;
+
+const NORMAL_SPEED = true;
+const FAST = 1000;
 
 function timeout(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -24,7 +29,6 @@ export class MainView {
   foreground: HTMLElement | null = null;
 
   handleLoadFn: Function | null = null;
-  loadingCallback: () => void | null = null;
   scenes = ['hong_kong', 'snowflake', 'where_am_i', 'birds_nest', WORLD_MAP_SCENE];
   activeScene = 0;
   renderedEntities: HTMLElement[] = [];
@@ -49,13 +53,19 @@ export class MainView {
   worldMapAsset = document.getElementById('worldmapasset') as any;
   introImageContainer = document.getElementById('introimage');
 
-  foregrounded = false;
+  addIntroListener = false;
+  addHongKongListener = false;
+  snowFlurryListener = false;
+  whereAmIListener = false;
+  birdsNestListener = false;
+  outroListener = false;
+  worldMapListener = false;
 
-  themeMusicAnimNumber = 1;
+  foregrounded = false;
 
   animateThemeMusic(volume, duration = 2000) {
     this.themeSong.setAttribute(
-      `animation__volume${this.themeMusicAnimNumber++}`,
+      `animation__volume`,
       `property: sound.volume; to: ${volume}; dur: ${duration}`
     );
   }
@@ -77,20 +87,30 @@ export class MainView {
   }
 
   worldmap() {
-    let toDestroy = this.renderedEntities.length;
-    if (toDestroy > 0) {
-      this.destroyRendered(() => this.worldmap());
-      return;
-    }
+    // Fade out theme song.
+    this.animateThemeMusic(THEME_IN);
+    setTimeout(() => {
+      let toDestroy = this.renderedEntities.length;
+      if (toDestroy > 0) {
+        this.destroyRendered(() => this.worldmap());
+        return;
+      }
 
-    this.worldMapVideo.setAttribute('visible', 'true');
+      this.worldMapVideo.setAttribute('visible', 'true');
 
-    // (this.worldMapVideo as any).play();
-    this.worldMapAsset.play();
-    (this.worldMapAsset as HTMLElement).addEventListener('ended', () => {
-      this.worldMapVideo.setAttribute('visible', 'false');
-      this.outro();
-    });
+      // (this.worldMapVideo as any).play();
+      if (!this.worldMapListener) {
+        (this.worldMapAsset as HTMLElement).addEventListener('ended', () => {
+          this.animateThemeMusic(THEME_OUT);
+          this.worldMapVideo.setAttribute('visible', 'false');
+          setTimeout(() => {
+            this.outro();
+          }, 2000);
+        });
+        this.worldMapListener = true;
+      }
+      this.worldMapAsset.play();
+    }, 2000);
   }
 
   showIntroImage() {
@@ -105,15 +125,20 @@ export class MainView {
       introImage.addEventListener('animationcomplete', e => {
         console.log('anim complete', e);
         if ((e as any).detail.name == 'animation__introfadein') {
-          setTimeout(() => {
-            this.activeScene = 0;
-            this.renderScene(this.activeScene, true, false, false);
+          setTimeout(
+            () => {
+              this.activeScene = 0;
+              this.renderScene(this.activeScene, true, false, false);
 
-            introImage.setAttribute(
-              'animation__fadeOut',
-              'property: components.material.material.opacity; from: 1; to: 0; dur: 2000; delay: 4000;'
-            );
-          }, 2000);
+              introImage.setAttribute(
+                'animation__fadeOut',
+                `property: components.material.material.opacity; from: 1; to: 0; dur: ${
+                  NORMAL_SPEED ? 2000 : FAST
+                }; delay: ${NORMAL_SPEED ? 4000 : FAST};`
+              );
+            },
+            NORMAL_SPEED ? 2000 : FAST
+          );
         }
         if ((e as any).detail.name == 'animation__fadeOut') {
           remove(introImage);
@@ -124,7 +149,9 @@ export class MainView {
 
       introImage.setAttribute(
         'animation__introfadein',
-        'property: components.material.material.opacity; to: 1; dur: 2000; delay: 3000;'
+        `property: components.material.material.opacity; to: 1; dur: ${
+          NORMAL_SPEED ? 2000 : FAST
+        }; delay: ${NORMAL_SPEED ? 3000 : FAST};`
       );
 
       this.introImageContainer.appendChild(introImage);
@@ -144,9 +171,10 @@ export class MainView {
     this.underwaterNoise.setAttribute(
       'animation__underwaterFade',
       `property: sound.volume; to: ${THEME_OUT}; dur: 2000`
-      // `property: sound.volume; to: 0; dur: 2000`
     );
-    setTimeout(() => {
+
+    await timeout(NORMAL_SPEED ? 3000 : FAST);
+    if (!this.addIntroListener) {
       (this.introAudio as any).addEventListener(
         'sound-ended',
         () => {
@@ -154,128 +182,164 @@ export class MainView {
         },
         false
       );
-      (this.introAudio as any).components.sound.playSound();
-    }, 3000);
+      this.addIntroListener = true;
+    }
+    (this.introAudio as any).components.sound.playSound();
   }
 
   theme() {
     (this.themeSong as any).components.sound.playSound();
     this.animateThemeMusic(THEME_OUT);
-    setTimeout(() => {
-      this.hongkong();
-    }, 12000);
+    setTimeout(
+      () => {
+        this.hongkong();
+      },
+      NORMAL_SPEED ? 12000 : FAST
+    );
   }
 
   hongkong() {
     // Fade out theme song.
     this.animateThemeMusic(THEME_IN);
-    setTimeout(() => {
-      (this.hongkongAudio as any).addEventListener(
-        'sound-ended',
-        () => {
-          this.animateOutForeground();
-          this.animateThemeMusic(THEME_OUT);
-          setTimeout(() => {
-            this.snowFlurry();
-          }, 15000);
-        },
-        false
-      );
-      (this.hongkongAudio as any).components.sound.playSound();
-      setTimeout(() => {
-        this.animateInForeground('#pandaasset');
-      }, 38000);
-    }, 2000);
+    setTimeout(
+      () => {
+        if (!this.addHongKongListener) {
+          (this.hongkongAudio as any).addEventListener(
+            'sound-ended',
+            () => {
+              this.animateOutForeground();
+              this.animateThemeMusic(THEME_OUT);
+              setTimeout(
+                () => {
+                  this.snowFlurry();
+                },
+                NORMAL_SPEED ? 15000 : FAST
+              );
+            },
+            false
+          );
+          this.addHongKongListener = true;
+        }
+        (this.hongkongAudio as any).components.sound.playSound();
+        setTimeout(
+          () => {
+            this.animateInForeground('#pandaasset');
+          },
+          NORMAL_SPEED ? 38000 : FAST
+        );
+      },
+      NORMAL_SPEED ? 2000 : FAST
+    );
   }
 
-  snowFlurry() {
-    this.loadingCallback = () => {
-      this.loadingCallback = null;
-
-      // Fade out theme song.
-      this.animateThemeMusic(THEME_IN);
-      setTimeout(() => {
+  async snowFlurry() {
+    await this.renderScene(1);
+    // Fade out theme song.
+    this.animateThemeMusic(THEME_IN);
+    setTimeout(() => {
+      if (!this.snowFlurryListener) {
         (this.snowFlurryAudio as any).addEventListener(
           'sound-ended',
           () => {
             this.animateThemeMusic(THEME_OUT);
-            setTimeout(() => {
-              this.whereAmI();
-            }, 15000);
+            setTimeout(
+              () => {
+                if (NORMAL_SPEED) {
+                  this.whereAmI();
+                } else {
+                  this.intro();
+                }
+              },
+              NORMAL_SPEED ? 15000 : FAST
+            );
           },
           false
         );
-        (this.snowFlurryAudio as any).components.sound.playSound();
-      }, 2000);
-    };
-    this.renderScene(1);
+        this.snowFlurryListener = true;
+      }
+      (this.snowFlurryAudio as any).components.sound.playSound();
+    }, 500);
   }
 
-  whereAmI() {
-    this.loadingCallback = () => {
-      this.loadingCallback = null;
+  async whereAmI() {
+    await this.renderScene(2);
 
-      // Fade out theme song.
-      this.animateThemeMusic(THEME_IN);
-      setTimeout(() => {
+    // Fade out theme song.
+    this.animateThemeMusic(THEME_IN);
+    setTimeout(() => {
+      if (!this.whereAmIListener) {
         (this.whereAmIAudio as any).addEventListener(
           'sound-ended',
           () => {
             this.animateThemeMusic(THEME_OUT);
-            setTimeout(() => {
-              this.birdsNest();
-            }, 15000);
+            setTimeout(
+              () => {
+                this.birdsNest();
+              },
+              NORMAL_SPEED ? 15000 : FAST
+            );
           },
           false
         );
-        (this.whereAmIAudio as any).components.sound.playSound();
-      }, 2000);
-    };
-    this.renderScene(2);
+        this.whereAmIListener = true;
+      }
+      (this.whereAmIAudio as any).components.sound.playSound();
+    }, 500);
   }
 
-  birdsNest() {
-    this.loadingCallback = () => {
-      this.loadingCallback = null;
-
-      // Fade out theme song.
-      this.animateThemeMusic(THEME_IN);
-      setTimeout(() => {
+  async birdsNest() {
+    await this.renderScene(3);
+    // Fade out theme song.
+    this.animateThemeMusic(THEME_IN);
+    setTimeout(() => {
+      if (!this.birdsNestListener) {
         (this.birdsNestAudio as any).addEventListener(
           'sound-ended',
           () => {
             this.animateThemeMusic(THEME_OUT);
-            setTimeout(() => {
-              this.worldmap();
-            }, 15000);
+            setTimeout(
+              () => {
+                this.worldmap();
+              },
+              NORMAL_SPEED ? 15000 : FAST
+            );
           },
           false
         );
-        (this.birdsNestAudio as any).components.sound.playSound();
-      }, 2000);
-    };
-    this.renderScene(3);
+        this.birdsNestListener = true;
+      }
+      (this.birdsNestAudio as any).components.sound.playSound();
+    }, 500);
   }
 
-  outro() {
+  async outro() {
+    await this.renderScene(4);
     // Fade out theme song.
     this.animateThemeMusic(THEME_IN);
 
-    setTimeout(() => {
-      (this.outroAudio as any).addEventListener(
-        'sound-ended',
-        () => {
-          this.animateThemeMusic(THEME_OUT);
+    setTimeout(
+      () => {
+        if (!this.outroListener) {
+          (this.outroAudio as any).addEventListener(
+            'sound-ended',
+            () => {
+              this.animateThemeMusic(THEME_OUT);
 
-          setTimeout(() => {
-            this.credits();
-          }, 5000);
-        },
-        false
-      );
-      (this.outroAudio as any).components.sound.playSound();
-    }, 2000);
-    this.renderScene(4);
+              setTimeout(
+                () => {
+                  this.credits();
+                },
+                NORMAL_SPEED ? 5000 : FAST
+              );
+            },
+            false
+          );
+          this.outroListener = true;
+        }
+        (this.outroAudio as any).components.sound.playSound();
+      },
+      NORMAL_SPEED ? 1200 : FAST
+    );
   }
 
   removeCredits() {
@@ -320,13 +384,15 @@ export class MainView {
 
         creditImg.setAttribute(
           'animation__scale',
-          `property: scale; dur: 2000; from: ${CREDITS_SCALE * 0.95} ${CREDITS_SCALE *
-            0.95} ${CREDITS_SCALE *
+          `property: scale; dur: ${NORMAL_SPEED ? 2000 : FAST}; from: ${CREDITS_SCALE *
+            0.95} ${CREDITS_SCALE * 0.95} ${CREDITS_SCALE *
             0.95}; to: ${CREDITS_SCALE} ${CREDITS_SCALE} ${CREDITS_SCALE};`
         );
         creditImg.setAttribute(
           'animation__opacity',
-          `property: components.material.material.opacity; dur: 2000; from: 0; to: 1;`
+          `property: components.material.material.opacity; dur: ${
+            NORMAL_SPEED ? 2000 : FAST
+          }; from: 0; to: 1;`
         );
 
         this.creditImg = creditImg;
@@ -337,7 +403,7 @@ export class MainView {
 
   async credits() {
     // Show credits
-    await timeout(5000);
+    await timeout(NORMAL_SPEED ? 5000 : FAST);
 
     // Fade out sky
     Array.from(this.skyContainer.children).forEach(sky => {
@@ -349,34 +415,34 @@ export class MainView {
 
     await this.showCredits(1);
 
-    await timeout(10000);
+    await timeout(NORMAL_SPEED ? 10000 : FAST);
 
     await this.showCredits(2);
 
-    await timeout(13000);
+    await timeout(NORMAL_SPEED ? 13000 : FAST);
 
     await this.showCredits(3);
 
-    await timeout(10000);
+    await timeout(NORMAL_SPEED ? 10000 : FAST);
 
     await this.showCredits(4);
 
-    await timeout(12000);
+    await timeout(NORMAL_SPEED ? 12000 : FAST);
 
     await this.showCredits(5);
 
-    await timeout(9000);
+    await timeout(NORMAL_SPEED ? 9000 : FAST);
 
     await this.showCredits(6);
 
-    await timeout(13000);
+    await timeout(NORMAL_SPEED ? 13000 : FAST);
 
-    this.animateThemeMusic(0, 10000);
+    this.animateThemeMusic(0, NORMAL_SPEED ? 10000 : FAST);
     await this.removeCredits();
 
     // Fade out sky entirely
     this.destroyRendered(async () => {
-      await timeout(8000);
+      await timeout(NORMAL_SPEED ? 8000 : FAST);
 
       // Loop the experience
       this.intro();
@@ -395,14 +461,22 @@ export class MainView {
   }
 
   hookAssetLoader() {
-    const assets = Array.from(document.querySelector('a-assets').children);
+    const assetsContainer = document.querySelector('a-assets');
+
+    assetsContainer.addEventListener('loaded', () => {
+      this.loaded();
+    });
+
+    const assets = Array.from(assetsContainer.children);
     const assetState: {[key: string]: boolean} = {};
     let numLoaded = 0;
 
     const assetLoaded = (asset: HTMLElement) => {
       if (!assetState[asset.id]) {
         numLoaded++;
-        this.progressElem.style.right = `${(1 - Math.min(numLoaded / assets.length, 1)) * 100}%`;
+        this.progressElem.style.right = `${(1 -
+          Math.min(numLoaded / assets.length, 1)) *
+          100}%`;
       }
       assetState[asset.id] = true;
 
@@ -437,7 +511,7 @@ export class MainView {
     );
 
     // Register event listeners.
-    this.registerEvents();
+    // this.registerEvents();
   }
 
   /**
@@ -468,6 +542,15 @@ export class MainView {
     this.foregroundContainer.appendChild(this.foreground);
   }
 
+  async minimalBug() {
+    let i = 0;
+    while (true) {
+      this.renderScene(i);
+      i = (i + 1) % this.scenes.length;
+      await timeout(6000);
+    }
+  }
+
   hideForeground() {
     if (this.foreground) {
       this.foreground.setAttribute(
@@ -490,7 +573,10 @@ export class MainView {
           if ((e as any).detail.name == 'animation__destroy') {
             remove(elem);
             toDestroy--;
-            if (toDestroy == 0) callback();
+            if (toDestroy == 0) {
+              callback();
+              return;
+            }
           }
         });
         animElem.setAttribute(
@@ -499,91 +585,107 @@ export class MainView {
         );
       }
       return;
+    } else {
+      callback();
     }
-    callback();
   }
 
   renderScene(idx, renderSky = true, renderSpheres = true, destroy = true) {
-    if (destroy) {
-      let toDestroy = this.renderedEntities.length;
-      if (toDestroy > 0) {
-        this.destroyRendered(() => this.renderScene(idx));
-        return;
-      }
-    }
-
-    const scene = this.scenes[idx];
-    const spheres = scene == WORLD_MAP_SCENE || !renderSpheres ? [] : poissonDisk();
-
-    let loadCounter = 0;
-    this.handleLoadFn = () => {
-      loadCounter++;
-      if (loadCounter >= spheres.length + 1) {
-        // this.loading.classList.add('loaded');
-        if (this.loadingCallback != null) this.loadingCallback();
-      }
-    };
-
-    if (renderSky) {
-      const sky = document.createElement('a-sky');
-
-      sky.addEventListener('materialtextureloaded', () => {
-        this.handleLoadFn();
-      });
-
-      sky.setAttribute('src', `#scene_${scene}`);
-      sky.setAttribute('backround', 'black');
-      sky.setAttribute('rotation', '0 0 0');
-      sky.setAttribute('material', 'opacity: 0');
-      sky.setAttribute(
-        'animation__opacity',
-        'startEvents: materialtextureloaded; property: components.material.material.opacity; to: 1; dur: 5000'
-      );
-
-      this.skyContainer.appendChild(sky);
-      this.renderedEntities.push(sky);
-    }
-
-    // Add spheres.
-    if (renderSpheres) {
-      const sceneStart: number = IMAGES[scene][0];
-      const sceneEnd: number = IMAGES[scene][1];
-      const sceneObjects: number = sceneEnd - sceneStart + 1;
-
-      let i = 0;
-      for (const sphere of spheres) {
-        const image = document.createElement('a-image');
-        image.setAttribute('opacity', '0');
-        image.setAttribute('material', 'alphaTest: 0.0001');
-        image.setAttribute(
-          'animation__opacity',
-          'startEvents: materialtextureloaded; property: components.material.material.opacity; to: 1; dur: 2000'
-        );
-        image.setAttribute('render-order', 'midground');
-
-        image.addEventListener('materialtextureloaded', () => {
-          this.handleLoadFn();
-        });
-        image.setAttribute('src', `#object${(i % sceneObjects) + sceneStart}`);
-
-        const container = document.createElement('a-entity');
-        container.appendChild(image);
-
-        const radius = sphere.radius * constants.radiusDrawMultiplier;
-        container.setAttribute('position', `${sphere.x} ${sphere.y} ${sphere.z}`);
-        image.setAttribute('rotation', `0 0 ${Math.random() * 360}`);
-        image.setAttribute('scale', `${radius} ${radius} ${radius}`);
-        container.setAttribute('look-at', '[camera]');
-        this.aframeScene.appendChild(container);
-        i++;
-
-        if (!this.activeScene) {
-          container.style.display = 'none';
+    return new Promise(resolve => {
+      if (destroy) {
+        let toDestroy = this.renderedEntities.length;
+        if (toDestroy > 0) {
+          if (renderSky == false && renderSpheres == false) {
+            this.destroyRendered(() => {
+              resolve();
+              return;
+            });
+          } else {
+            this.destroyRendered(() => {
+              this.renderScene(idx).then(() => resolve());
+            });
+          }
+          return;
         }
-
-        this.renderedEntities.push(container);
       }
-    }
+
+      const scene = this.scenes[idx];
+      const spheres = scene == WORLD_MAP_SCENE || !renderSpheres ? [] : poissonDisk();
+
+      let loadCounter = 0;
+      this.handleLoadFn = () => {
+        loadCounter++;
+        if (loadCounter >= spheres.length + 1) {
+          resolve();
+          return;
+        }
+      };
+
+      if (renderSky) {
+        const sky = document.createElement('a-sky');
+
+        sky.addEventListener('animationcomplete', e => {
+          if ((e as any).detail.name == 'animation__opacity') {
+            this.handleLoadFn();
+          }
+        });
+
+        sky.setAttribute('src', `#scene_${scene}`);
+        sky.setAttribute('backround', 'black');
+        sky.setAttribute('rotation', '0 0 0');
+        sky.setAttribute('material', 'opacity: 0');
+        sky.setAttribute(
+          'animation__opacity',
+          'startEvents: materialtextureloaded; property: components.material.material.opacity; to: 1; dur: 5000'
+        );
+
+        this.skyContainer.appendChild(sky);
+        this.renderedEntities.push(sky);
+      }
+
+      // Add spheres.
+      if (renderSpheres && spheres.length > 0) {
+        const sceneStart: number = IMAGES[scene][0];
+        const sceneEnd: number = IMAGES[scene][1];
+        const sceneObjects: number = sceneEnd - sceneStart + 1;
+
+        let i = 0;
+        for (const sphere of spheres) {
+          const image = document.createElement('a-image');
+          image.addEventListener('animationcomplete', e => {
+            if ((e as any).detail.name == 'animation__opacity') {
+              this.handleLoadFn();
+            }
+          });
+
+          image.setAttribute('opacity', '0');
+          image.setAttribute('material', 'alphaTest: 0.0001');
+          image.setAttribute(
+            'animation__opacity',
+            'startEvents: materialtextureloaded; property: components.material.material.opacity; to: 1; dur: 2000'
+          );
+          image.setAttribute('render-order', 'midground');
+          image.setAttribute('src', `#object${(i % sceneObjects) + sceneStart}`);
+
+          const container = document.createElement('a-entity');
+          container.appendChild(image);
+
+          const radius = sphere.radius * constants.radiusDrawMultiplier;
+          container.setAttribute('position', `${sphere.x} ${sphere.y} ${sphere.z}`);
+          image.setAttribute('rotation', `0 0 ${Math.random() * 360}`);
+          image.setAttribute('scale', `${radius} ${radius} ${radius}`);
+          container.setAttribute('look-at', '[camera]');
+          this.aframeScene.appendChild(container);
+          i++;
+
+          if (!this.activeScene) {
+            container.style.display = 'none';
+          }
+
+          this.renderedEntities.push(container);
+        }
+      }
+    });
   }
 
   toggleStats() {

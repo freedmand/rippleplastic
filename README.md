@@ -1,8 +1,10 @@
 # Ripple Plastic
 
-A virtual reality experiment that cautions against the global proliferation of plastic pollution in the ocean through a 3D recreation of Mandy Barker's famous environmental artwork.
+A virtual reality experiment that cautions against the global proliferation of plastic
+pollution in the ocean through a 3D recreation of Mandy Barker's famous environmental
+artwork.
 
-Demo: https://rippleplastic.netlify.com
+Live experience: https://rippleplastic.com
 
 ## Running locally
 
@@ -20,4 +22,5 @@ The project can be built by running
 npm run dev
 ```
 
-This will compile the assets and serve the project on localhost (usually http://localhost:5000). Modifying the source should dynamically rebuild the project.
+This will compile the assets and serve the project on localhost (usually
+http://localhost:5000). Modifying the source should dynamically rebuild the project.
