@@ -3,6 +3,7 @@ import {remove} from './helpers';
 import webAudioTouchUnlock from 'web-audio-touch-unlock';
 import constants from './constants.js';
 import IMAGES from './images.js';
+import {unlock} from './audio_context.js';
 
 const WORLD_MAP_SCENE = 'world_map';
 
@@ -123,7 +124,6 @@ export class MainView {
       introImage.setAttribute('opacity', '0');
 
       introImage.addEventListener('animationcomplete', e => {
-        console.log('anim complete', e);
         if ((e as any).detail.name == 'animation__introfadein') {
           setTimeout(
             () => {
@@ -495,13 +495,24 @@ export class MainView {
     });
   }
 
+  touchStarted() {
+    unlock();
+    try {
+      if (!(this.underwaterNoise as any).components.sound.isPlaying) {
+        (this.underwaterNoise as any).components.sound.play();
+      }
+    } catch (e) {}
+  }
+
   constructor() {
     this.hookAssetLoader();
+
+    document.body.addEventListener('touchstart', () => this.touchStarted(), null);
+    document.body.addEventListener('click', () => this.touchStarted(), null);
 
     this.beginButton.addEventListener(
       'click',
       async () => {
-        await this.startWebAudio();
         this.beginPane.classList.add('start');
         setTimeout(() => document.body.removeChild(this.beginPane), 5000);
 

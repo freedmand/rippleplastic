@@ -48521,6 +48521,33 @@ var app = (function (exports) {
       where_am_i: [69, 102],
     };
 
+    let isUnlocked = false;
+    function unlock() {
+      const aScene = document.getElementsByTagName('a-scene')[0];
+
+      if (isUnlocked) return;
+
+      const myContext = aScene.audioListener.context;
+      if (myContext.state == 'suspended') myContext.resume();
+
+      // create empty buffer and play it
+      const buffer = myContext.createBuffer(1, 1, 22050);
+      const source = myContext.createBufferSource();
+      source.buffer = buffer;
+      source.connect(myContext.destination);
+      source.start();
+
+      // by checking the play state after some time, we know if we're really unlocked
+      setTimeout(function() {
+        if (
+          source.playbackState === source.PLAYING_STATE ||
+          source.playbackState === source.FINISHED_STATE
+        ) {
+          isUnlocked = true;
+        }
+      }, 0);
+    }
+
     const WORLD_MAP_SCENE = 'world_map';
     // const THEME_OUT = 0.05;
     // const THEME_IN = 0.03;
@@ -48569,8 +48596,9 @@ var app = (function (exports) {
             this.worldMapListener = false;
             this.foregrounded = false;
             this.hookAssetLoader();
+            document.body.addEventListener('touchstart', () => this.touchStarted(), null);
+            document.body.addEventListener('click', () => this.touchStarted(), null);
             this.beginButton.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
-                yield this.startWebAudio();
                 this.beginPane.classList.add('start');
                 setTimeout(() => document.body.removeChild(this.beginPane), 5000);
                 this.intro();
@@ -48622,7 +48650,6 @@ var app = (function (exports) {
                 introImage.setAttribute('position', '0 0 -12');
                 introImage.setAttribute('opacity', '0');
                 introImage.addEventListener('animationcomplete', e => {
-                    console.log('anim complete', e);
                     if (e.detail.name == 'animation__introfadein') {
                         setTimeout(() => {
                             this.activeScene = 0;
@@ -48875,6 +48902,15 @@ var app = (function (exports) {
                 if (elem.complete)
                     assetLoaded(elem);
             });
+        }
+        touchStarted() {
+            unlock();
+            try {
+                if (!this.underwaterNoise.components.sound.isPlaying) {
+                    this.underwaterNoise.components.sound.play();
+                }
+            }
+            catch (e) { }
         }
         /**
          * Create a foreground model.
