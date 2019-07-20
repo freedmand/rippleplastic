@@ -48638,7 +48638,13 @@ var app = (function (exports) {
                     });
                     this.worldMapListener = true;
                 }
-                this.worldMapAsset.play();
+                this.worldMapAsset.play().catch(() => {
+                    setTimeout(() => {
+                        this.animateThemeMusic(THEME_OUT);
+                        this.worldMapVideo.setAttribute('visible', 'false');
+                        this.outro();
+                    }, 500);
+                });
             }, 2000);
         }
         showIntroImage() {
